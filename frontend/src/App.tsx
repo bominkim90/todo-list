@@ -1,9 +1,20 @@
+import {Routes, Route} from 'react-router-dom'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Todos from './pages/Todos'
+
 
 function App() {
+  const loginFlag: boolean = true
 
   return (
-    <div>
-      <h1>투두 리스트 메인 페이지입니다.</h1>
+    <div id="wrap">
+      <Routes>
+        <Route path="/" element={loginFlag ? <Todos /> : <Login />}/>
+        <Route path="/register" element={<Register />}/>
+        <Route path="/todos" element={<Todos />}/>
+        <Route path="*" element={<div>없는 페이지에요</div>}/>
+      </Routes>
     </div>
   )
 }
