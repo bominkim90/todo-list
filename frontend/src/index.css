@@ -1,1 +1,62 @@
-* {padding: 0; margin: 0; box-sizing: border-box;}
+*, *::before, *::after {padding: 0; margin: 0; box-sizing: border-box;}
+body, input[type=text], button {font-size: 16px; font-weight: 400; color: #0F172A;}
+h1,h2,h3,h4,h5,h6 {color: #1E293B; font-weight: 500;}
+input, button {border: none; outline: 0;}
+button {cursor: pointer; background-color: transparent;}
+a {text-decoration: none;}
+a:active {color: #0F172A;}
+
+h3 {font-size: 24px; font-weight: 700; line-height: 1.5;}
+
+#wrap {max-width: 1152px; margin: 0 auto;}
+.text-align-left {text-align: left;}
+.text-align-center {text-align: center;}
+.text-align-right {text-align: right;}
+
+/* input, button */
+.home-login-join {width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center;}
+.home-login-join > .box {max-width: 360px; width: 100%;}
+.home-login-join > .box > * + * {margin-top: 8px;}
+.home-login-join > .box > h1 {margin-bottom: 20px;}
+.input, .btn {display: flex; align-items: center; justify-content: center; width: 100%; padding: 8px 16px; border-radius: 4px;}
+.input {position: relative; color:#0F172A; border: 1px solid #D4D4D8;}
+.input.left {justify-content: flex-start;}
+.input.no-border {border: none;}
+input.input::placeholder {color: #6B7280;}
+.input.todo, .input.done {padding-left: 0; padding-right: 0;}
+.input.todo::before, 
+.input.done::before {content: ''; display: inline-block; width: 18px; height: 18px;  border-radius: 6px; margin-right: 10px;}
+.input.todo::before {border: 2px solid #475569;}
+.input.done::before {background: url('/icons/checkbox.svg') center/100% 100% no-repeat;}
+
+.btn {border: 1px solid #94A3B8; color: #0F172A;}
+.btn.black {color: #fff; background-color: #0F172A; border: none;}
+.btn.white {color: #0F172A; background-color: #fff; border-color: #94A3B8;}
+.btn.blue {background-color: #E2E8F0; font-weight: 700; border: none;}
+.btn.color-red {color: #EF4444; border-color: #EF4444;}
+.btn.left {justify-content: flex-start;}
+.btn.other {position: relative;}
+.btn.other::after {cursor: pointer; content: ''; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: url('/icons/ellipsis.svg');} 
+.btn.long {display: block;}
+.btn.short {display: inline-block; width: auto;}
+
+
+/* login, register */
+.input-wrap :is(.input, .btn) {width: 360px;}
+
+/* todo */
+.todo-home {padding: 40px 24px; display: flex; gap: 0 16px;}
+.todo-home > *:not(.todo-team) {flex: 1;}
+.todo-home .todo-pending {margin-top: 20px;}
+.todo-home .todo-done {margin-top: 40px;}
+.todo-home :is(.todo-pending, .todo-done) > * + * {margin-top: 10px;}
+.todo-team {width: 265px; padding-right: 24px;}
+.todo-team > * {display: flex; width: 100%; height: 40px; padding: 8px 16px; border-radius: 4px;}
+.todo-team > * + * {margin-top: 8px;}
+.todo-team .team {justify-content: flex-start;}
+.todo-team .create {justify-content: center; border: 1px solid #94A3B8;}
+.todo-list {flex: 1;}
+.input-row {display: flex; gap: 0 20px;}
+.input-row > .input {flex: 1;}
+.input-row > .btn-side {flex-shrink: 0;}
+.input-row > .btn-side > * + *{margin-left: 4px;}
