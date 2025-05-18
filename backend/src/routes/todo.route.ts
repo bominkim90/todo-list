@@ -3,32 +3,24 @@ import { StatusCodes } from "http-status-codes";
 
 const router = Router();
 
-router.post("/todos", (req, res) => {
+// 개인 todo 등록
+router.post("/", (req, res) => {
   res.status(StatusCodes.CREATED).json("개인 Todo 등록");
 });
 
-router.post("/todos/:teamId", (req, res) => {
-  res.status(StatusCodes.CREATED).json("팀 Todo 등록");
-});
-
-router.get("/todos", (req, res) => {
+// 개인 todo 조회
+router.get("/", (req, res) => {
   res.status(StatusCodes.OK).json("개인 Todo 조회");
 });
 
-router.get("/todos/:teamId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 Todo 조회");
+// 개인 todo 수정
+router.put("/:todoId", (req, res) => {
+  res.status(StatusCodes.OK).json("개인 Todo 수정");
 });
 
-router.put("/todos", (req, res) => {
-  res.status(StatusCodes.OK).json("Todo 수정");
-});
-
-router.delete("/todos", (req, res) => {
+// 개인 todo 삭제
+router.delete("/:todoId", (req, res) => {
   res.status(StatusCodes.OK).json("개인 Todo 삭제");
-});
-
-router.delete("/todos/:teamId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 Todo 삭제");
 });
 
 export default router;
