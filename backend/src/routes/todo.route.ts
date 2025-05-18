@@ -3,22 +3,94 @@ import { StatusCodes } from "http-status-codes";
 
 const router = Router();
 
-// 개인 todo 등록
+/**
+ * @swagger
+ * tags:
+ *   name: Todos
+ *   description: 개인 Todo API
+ */
+
+/**
+ * @swagger
+ * /todos:
+ *   post:
+ *     summary: 개인 Todo 등록
+ *     tags: [Todos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               contents:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: 등록 성공
+ */
 router.post("/", (req, res) => {
   res.status(StatusCodes.CREATED).json("개인 Todo 등록");
 });
 
-// 개인 todo 조회
+/**
+ * @swagger
+ * /todos:
+ *   get:
+ *     summary: 개인 Todo 조회
+ *     tags: [Todos]
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ */
 router.get("/", (req, res) => {
   res.status(StatusCodes.OK).json("개인 Todo 조회");
 });
 
-// 개인 todo 수정
+/**
+ * @swagger
+ * /todos/{todoId}:
+ *   put:
+ *     summary: 개인 Todo 수정
+ *     tags: [Todos]
+ *     parameters:
+ *       - in: path
+ *         name: todoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               contents:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: 수정 성공
+ */
 router.put("/:todoId", (req, res) => {
   res.status(StatusCodes.OK).json("개인 Todo 수정");
 });
 
-// 개인 todo 삭제
+/**
+ * @swagger
+ * /todos/{todoId}:
+ *   delete:
+ *     summary: 개인 Todo 삭제
+ *     tags: [Todos]
+ *     parameters:
+ *       - in: path
+ *         name: todoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: 삭제 성공
+ */
 router.delete("/:todoId", (req, res) => {
   res.status(StatusCodes.OK).json("개인 Todo 삭제");
 });
