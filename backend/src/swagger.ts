@@ -15,4 +15,18 @@ export const swaggerSpec = swaggerJSDoc({
     ],
   },
   apis: ["./src/routes/*.ts"], // 라우터 파일에 Swagger 주석 작성하면 여기서 읽는다.
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
 });

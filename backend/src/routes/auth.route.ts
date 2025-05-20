@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
+import { signup, login } from "../controller/user.controller";
 
 const router = Router();
 
@@ -7,7 +7,7 @@ const router = Router();
  * @swagger
  * tags:
  *   name: Auth
- *   description: 인증 관련 API
+ *   description: 사용자 인증 API (ID 기반)
  */
 
 /**
@@ -23,17 +23,19 @@ const router = Router();
  *           schema:
  *             type: object
  *             properties:
- *               email:
- *                 type: string
+ *               id:
+ *                 type: integer
+ *                 example: 1
  *               password:
  *                 type: string
+ *                 example: "1234"
  *     responses:
  *       201:
  *         description: 회원가입 성공
+ *       400:
+ *         description: 요청 오류
  */
-router.post("/signup", (req, res) => {
-  res.status(StatusCodes.CREATED).json("회원가입");
-});
+router.post("/signup", signup);
 
 /**
  * @swagger
@@ -48,16 +50,25 @@ router.post("/signup", (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               email:
- *                 type: string
+ *               id:
+ *                 type: integer
+ *                 example: 1
  *               password:
  *                 type: string
+ *                 example: "1234"
  *     responses:
  *       200:
- *         description: 로그인 성공
+ *         description: 로그인 성공, JWT 토큰 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: 인증 실패
  */
-router.post("/login", (req, res) => {
-  res.status(StatusCodes.OK).json("로그인");
-});
+router.post("/login", login);
 
 export default router;
