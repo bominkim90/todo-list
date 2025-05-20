@@ -24,8 +24,8 @@ const router = Router();
  *             type: object
  *             properties:
  *               id:
- *                 type: integer
- *                 example: 1
+ *                 type: string
+ *                 example: "test"
  *               password:
  *                 type: string
  *                 example: "1234"
@@ -51,8 +51,8 @@ router.post("/signup", signup);
  *             type: object
  *             properties:
  *               id:
- *                 type: integer
- *                 example: 1
+ *                 type: string
+ *                 example: "test"
  *               password:
  *                 type: string
  *                 example: "1234"

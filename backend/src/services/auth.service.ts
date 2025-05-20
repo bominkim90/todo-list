@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-export const signup = async (id: number, password: string) => {
+export const signup = async (id: string, password: string) => {
   const existing = await prisma.user.findUnique({ where: { id } });
   if (existing) throw new Error("이미 존재하는 ID입니다.");
 
@@ -19,7 +19,7 @@ export const signup = async (id: number, password: string) => {
   return { id: user.id };
 };
 
-export const login = async (id: number, password: string) => {
+export const login = async (id: string, password: string) => {
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user) throw new Error("존재하지 않는 사용자입니다.");
 
