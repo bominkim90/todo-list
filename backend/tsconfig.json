@@ -10,7 +10,7 @@
     "strict": true, // 엄격한 타입 검사
     "skipLibCheck": true, // 외부 모듈 타입 검사 생략 (속도 ↑)
     "forceConsistentCasingInFileNames": true, // 대소문자 경로 일관성
-
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     /* 개발 편의성 */
     "noImplicitAny": true, // 암묵적 any 금지
     "moduleResolution": "node", // Node 방식 모듈 탐색
@@ -20,6 +20,6 @@
       "*": ["src/*"]
     }
   },
-  "include": ["src/**/*"], // 포함할 파일
+  "include": ["src"],
   "exclude": ["node_modules", "dist"] // 제외할 디렉토리
 }
