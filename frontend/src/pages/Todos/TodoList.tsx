@@ -1,75 +1,36 @@
-import axios from "axios";
-import { useState } from "react";
 import RegistTodo from "./RegistTodo";
 import TodoRow from "../../components/TodoRow";
 import DoneRow from "../../components/DoneRow";
 
 
-function TodoList(){
+// 투두리스트 등록하기 / TO DO 목록 / DONE 목록
+function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:any){
+  // 전달 받은 arr_todoList를 두 배열(todo, done 으로 분리)
+  let todo:any = [];
+  let done:any = [];
 
-// 내 투두리스트 조회
-  let todoArr: any[] = []
-  let doneArr: any[] = []
-
-  async function getTodos(){
-    const res = await axios.get('/todos');
-    // res.data가 배열로 온다는 가정하에
-    res.data.forEach( (item: any) => {
-      if( !item.isDone ) todoArr.push(item)
-      else doneArr.push(item)
-    })
-  }
-  // getTodos()
-
-  // todo/done리스트 -> mock 데이터
-  todoArr = [
-    {
-      todoId : 1,
-      contents: "나의 할일 1",
-      isDone: false
-    },
-    {
-      todoId : 2,
-      contents: "나의 할일 2",
-      isDone: false
-    },
-    {
-      todoId : 3,
-      contents: "나의 할일 3",
-      isDone: false
-    },
-  ]
-  doneArr = [
-    {
-      todoId : 4,
-      contents: "움하하하하",
-      isDone: true
-    },
-    {
-      todoId : 5,
-      contents: "이야호",
-      isDone: true
-    }
-  ]
-  let [todoList, setTodoList] = useState(todoArr)
-  let [doneList, setDoneList] = useState(doneArr)
-
-
+  // arr_todoList : '팀 별로(나포함)' 할일 목록에 따른 -> 투두리스트 정보
+  arr_todoList.forEach( (value:any) => {
+    if(value.isDone) done.push(value)
+    else todo.push(value)
+  });
+  
+  
   return (
     <div className="todo-list">
       {/* 투두리스트 등록하기 */}
-      <RegistTodo />
+      <RegistTodo arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
 
       {/* TODO 리스트 */}
       <div className='todo-pending'>
         <h3>TO DO</h3>
-        {todoList.map( value => <TodoRow row={value} key={value.todoId} /> )}
+        {todo.map( (value:any) => <TodoRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )}
       </div>
 
       {/* DONE 리스트 */}
       <div className='todo-done'>
         <h3>DONE</h3>
-        {doneList.map( value => <DoneRow row={value} key={value.todoId} /> )}
+        {done.map( (value:any) => <DoneRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )}
       </div>
     </div>
 )
