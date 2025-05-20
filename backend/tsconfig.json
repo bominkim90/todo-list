@@ -18,7 +18,8 @@
     "baseUrl": ".", // 절대경로 import 시 기준 경로
     "paths": {
       "*": ["src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*"], // 포함할 파일
   "exclude": ["node_modules", "dist"] // 제외할 디렉토리

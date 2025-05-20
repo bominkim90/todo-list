@@ -3,6 +3,8 @@ import { signup, login } from "../controller/user.controller";
 
 const router = Router();
 
+router.use(authenticate);
+
 /**
  * @swagger
  * tags:
