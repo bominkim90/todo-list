@@ -1,4 +1,4 @@
-import RegistTodo from "./RegistTodo";
+import TodosRegist from "./TodosRegist";
 import TodoRow from "../../components/TodoRow";
 import DoneRow from "../../components/DoneRow";
 
@@ -19,7 +19,7 @@ function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:
   return (
     <div className="todo-list">
       {/* 투두리스트 등록하기 */}
-      <RegistTodo arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
+      <TodosRegist arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
 
       {/* TODO 리스트 */}
       <div className='todo-pending'>

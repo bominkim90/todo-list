@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
+import PopDelete from '../Popup/PopDelete';
 
 
 function TodoRow({value, fetchTodoList}: any) {
   let [todoContents ,setTodoContents] = useState(value.contents);
   let [rowUpdateState, setRowUpdateState] = useState(-1);
+  let [showPopDelete, setShowPopDelete] = useState(false);
 
   // 수정 => PUT /todos {todoId: todo아이디, contents: 내용}
   function completeUpdate() {
@@ -25,7 +27,7 @@ function TodoRow({value, fetchTodoList}: any) {
     // });
   }
 
-  // 삭제 => DELETE /todos {todoId : todo아이디}
+  // 삭제 => DELETE /todos/{todoId}
   function deleteTodo() {
     console.log("todo 삭제 버튼 클릭 시 => todoId : ", value.todoId);
     // 백엔드 API 연동 했을 시
@@ -40,7 +42,7 @@ function TodoRow({value, fetchTodoList}: any) {
   }
 
   return (
-    <div className='todo-row'>
+    <div className='input-btn-row'>
       {
         rowUpdateState === value.todoId 
         ? <input className="input" type="text" value={todoContents} onChange={(e)=>{setTodoContents(e.target.value)}} />
@@ -58,10 +60,11 @@ function TodoRow({value, fetchTodoList}: any) {
           : 
           <>
           <button type='button' className='btn short color-black' onClick={()=>{setRowUpdateState(value.todoId)}}>수정</button>
-          <button type='button' className='btn short color-red' onClick={deleteTodo}>삭제</button>
+          <button type='button' className='btn short color-red' onClick={()=>{setShowPopDelete(true)}}>삭제</button>
           </>
         }
       </div>
+      {showPopDelete && <PopDelete setShowPopDelete={setShowPopDelete} todoId={value.todoId} fetchTodoList={fetchTodoList}/>}
     </div>
   )
 }

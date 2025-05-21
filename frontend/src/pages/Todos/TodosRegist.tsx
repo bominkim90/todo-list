@@ -21,7 +21,7 @@ function RegistTodo({fetchTodoList, currentTeamId}:any){
 
 
   return (
-    <div className='todo-row'>
+    <div className='input-btn-row'>
       <input className="input" type="text" placeholder="투두리스트 등록하기" 
       onChange={(e)=>{setTodoContents(e.target.value)}} />
       <div className='btn-side'>

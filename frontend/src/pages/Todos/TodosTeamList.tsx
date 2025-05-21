@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import PopupTeamCreate from "../../Popup/PopupTeamCreate";
+import PopupTeamCreate from "../../Popup/PopTeamCreate";
+import TeamDetail from '../../components/TeamDetail';
 
 
 // '할일 목록 버튼's / 팀만들기 버튼
-function TeamBtnList({fetchTodoList, setCurrentTeamId}:any){
+function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   let [teamBtns, setTeamBtns] = useState<any[]>([]);
+  let [showTeamDetail, setShowTeamDetail] = useState(false);
 
   // 더미 데이터 (팀 리스트)
   let teamArr = [ 
@@ -46,22 +48,30 @@ function TeamBtnList({fetchTodoList, setCurrentTeamId}:any){
 
   // '팀 만들기' 버튼 클릭 => 팝업 노출
   let [teamPopup, setTeamPopup] = useState(false);
+  
+  // 팀 상세 창 active state
+  let [activeTeamDetailPop, setActiveTeamDetailPop] = useState(0);
+
 
 
   return (
     <div className="todo-teamList">
       {/* '나' 할일 목록 버튼 */}
-      <button type="button" className={`btn left blue ${(activeTeamBtnId === 0 ? "active" : "")}`} onClick={ () => {getTeamTodos()} }>할 일 목록</button>
+      <div className={`btn left blue ${(activeTeamBtnId === 0 ? "active" : "")}`} onClick={ () => {getTeamTodos()} }>할 일 목록</div>
       
       {/* '팀' 할일 목록 버튼 */}
       {teamBtns.map( value => {
-        return <button type="button" className={`btn left blue other ${(activeTeamBtnId === value.teamId ? "active" : "")}`} 
-        data-teamid={value.teamId} key={value.teamId}
-        onClick={ () => {getTeamTodos(value.teamId)} }>팀 {value.teamName}의 할 일 목록</button>
+        return <div className={`btn left blue ${(activeTeamBtnId === value.teamId ? "active" : "")}`} key={value.teamId} 
+        onClick={ () => { getTeamTodos(value.teamId) } }>
+          팀 {value.teamName}의 할 일 목록
+          <div className="ellipsis" onClick={()=>{setActiveTeamDetailPop(value.teamId)}}>
+            { (activeTeamDetailPop === value.teamId) && <TeamDetail setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} /> }
+          </div>
+        </div>
       }) }
       
       {/* 팀 만들기 버튼 */}
-      <button type="button" className="btn center" onClick={ ()=>{setTeamPopup(true);} }>팀 만들기</button>
+      <div className="btn center" onClick={ ()=>{setTeamPopup(true);} }>팀 만들기</div>
       
       {teamPopup && <PopupTeamCreate setTeamPopup={setTeamPopup}/>}
     </div>
@@ -69,4 +79,4 @@ function TeamBtnList({fetchTodoList, setCurrentTeamId}:any){
 }
 
 
-export default TeamBtnList;
+export default TodosTeamList;

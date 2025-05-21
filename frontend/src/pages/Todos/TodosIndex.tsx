@@ -1,5 +1,5 @@
-import TodoList from './Todos/TodoList';
-import TeamBtnList from './Todos/TeamBtnList';
+import TodosList from './TodosList';
+import TodosTeamList from './TodosTeamList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -45,10 +45,10 @@ function Todos() {
   return (
     <div className="todo-home">
       {/* 팀 목록 */}
-      <TeamBtnList setArr_todoList={setArr_todoList} setCurrentTeamId={setCurrentTeamId} fetchTodoList={fetchTodoList} />
+      <TodosTeamList setArr_todoList={setArr_todoList} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTodoList={fetchTodoList} />
 
       {/* TODO / DONE 리스트 */}
-      <TodoList arr_todoList={arr_todoList} currentTeamId={currentTeamId} setArr_todoList={setArr_todoList} fetchTodoList={fetchTodoList} />
+      <TodosList arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
     </div>
   )
 }
