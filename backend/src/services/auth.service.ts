@@ -1,15 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
-
 export const signup = async (id: string, password: string) => {
-  const existing = await prisma.user.findUnique({ where: { id } });
+  const existing = await prisma.users.findUnique({ where: { id } });
   if (existing) throw new Error("이미 존재하는 ID입니다.");
 
   const hashed = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({
+  const user = await prisma.users.create({
     data: {
       id,
       password: hashed,
@@ -20,7 +18,7 @@ export const signup = async (id: string, password: string) => {
 };
 
 export const login = async (id: string, password: string) => {
-  const user = await prisma.user.findUnique({ where: { id } });
+  const user = await prisma.users.findUnique({ where: { id } });
   if (!user) throw new Error("존재하지 않는 사용자입니다.");
 
   const valid = await bcrypt.compare(password, user.password);

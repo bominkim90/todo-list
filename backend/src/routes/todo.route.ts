@@ -5,17 +5,12 @@ const router = Router();
 
 /**
  * @swagger
- * tags:
- *   name: Todos
- *   description: 개인 Todo API
- */
-
-/**
- * @swagger
  * /todos:
  *   post:
  *     summary: 개인 Todo 등록
- *     tags: [Todos]
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -25,10 +20,14 @@ const router = Router();
  *             properties:
  *               contents:
  *                 type: string
+ *                 example: "운동하기"
  *     responses:
  *       201:
- *         description: 등록 성공
+ *         description: 생성된 Todo 반환
+ *       400:
+ *         description: 내용 없음
  */
+
 router.post("/", (req, res) => {
   res.status(StatusCodes.CREATED).json("개인 Todo 등록");
 });
