@@ -24,13 +24,19 @@ function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:
       {/* TODO 리스트 */}
       <div className='todo-pending'>
         <h3>TO DO</h3>
-        {todo.map( (value:any) => <TodoRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )}
+        {todo.length === 0
+          ? <p className="color-gray">할 일 항목이 없습니다.</p>
+          : todo.map( (value:any) => <TodoRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )
+        }
       </div>
 
       {/* DONE 리스트 */}
       <div className='todo-done'>
         <h3>DONE</h3>
-        {done.map( (value:any) => <DoneRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )}
+        {done.length === 0
+          ? <p className="color-gray">할 일 항목이 없습니다.</p>
+          : done.map( (value:any) => <DoneRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )
+        }
       </div>
     </div>
 )

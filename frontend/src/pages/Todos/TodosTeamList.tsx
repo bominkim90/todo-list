@@ -7,7 +7,6 @@ import TeamDetail from '../../components/TeamDetail';
 // '할일 목록 버튼's / 팀만들기 버튼
 function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   let [teamBtns, setTeamBtns] = useState<any[]>([]);
-  let [showTeamDetail, setShowTeamDetail] = useState(false);
 
   // 더미 데이터 (팀 리스트)
   let teamArr = [ 
@@ -37,6 +36,7 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
 
   // '할일 목록 버튼' 클릭 ( /todos/:teamId GET 요청 )
   async function getTeamTodos(teamId:any = '') {
+    localStorage.setItem("localStorage_currentTeamId", teamId); // localStorage_currentTeamId 저장
     console.log("teamId : ", teamId);
     setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
     fetchTodoList();

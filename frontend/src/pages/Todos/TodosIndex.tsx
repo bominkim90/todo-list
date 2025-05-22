@@ -5,26 +5,28 @@ import axios from 'axios';
 
 
 function Todos() {
-  let [currentTeamId, setCurrentTeamId] = useState(0);
+  const localStorage_currentTeamId = Number(localStorage.getItem("localStorage_currentTeamId")) || 0;
+  let [currentTeamId, setCurrentTeamId] = useState(localStorage_currentTeamId || 0);
+  
   let [arr_todoList, setArr_todoList] = useState<any[]>([]);
 
   // 더미 데이터
   let myTodos: any = [ 
-    {
-      todoId: 1,
-      contents: "나의 할일 1",
-      isDone: false
-    },
-    {
-      todoId: 2,
-      contents: "나의 할일 2",
-      isDone: false
-    },
-    {
-      todoId: 3,
-      contents: "나의 할일 3",
-      isDone: true
-    },
+    // {
+    //   todoId: 1,
+    //   contents: "나의 할일 1",
+    //   isDone: false
+    // },
+    // {
+    //   todoId: 2,
+    //   contents: "나의 할일 2",
+    //   isDone: false
+    // },
+    // {
+    //   todoId: 3,
+    //   contents: "나의 할일 3",
+    //   isDone: true
+    // },
   ]
 
   // todo 리스트 정보 갱신
