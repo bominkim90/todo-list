@@ -1,36 +1,38 @@
+import { createTeam } from "../controller/team.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();
-
-/**
- * @swagger
- * tags:
- *   name: Teams
- *   description: 팀 및 팀 Todo API
- */
 
 /**
  * @swagger
  * /teams:
  *   post:
  *     summary: 팀 생성
- *     tags: [Teams]
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               teamName:
+ *               name:
  *                 type: string
+ *                 example: "개발자 스터디"
  *     responses:
  *       201:
- *         description: 팀 생성됨
+ *         description: 팀 생성 완료
+ *       400:
+ *         description: 잘못된 요청
+ *       401:
+ *         description: 인증 실패
  */
-router.post("/", (req, res) => {
-  res.status(StatusCodes.CREATED).json("팀 생성");
-});
+
+router.post("/", authenticate, createTeam);
 
 /**
  * @swagger
