@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createTodoService } from "../services/todo.service";
+import { createTodoService, getTodosService } from "../services/todo.service";
 import { StatusCodes } from "http-status-codes";
 
 export const createTodo = async (req: Request, res: Response) => {
@@ -14,4 +14,11 @@ export const createTodo = async (req: Request, res: Response) => {
   const newTodo = await createTodoService(userId!, contents);
   res.status(StatusCodes.CREATED).json(newTodo);
   return;
+};
+
+export const getTodos = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  const todos = await getTodosService(userId!);
+  res.status(StatusCodes.OK).json(todos);
 };

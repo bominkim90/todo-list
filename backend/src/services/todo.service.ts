@@ -9,3 +9,10 @@ export const createTodoService = async (userId: string, contents: string) => {
   });
   return todo;
 };
+
+export const getTodosService = async (userId: string) => {
+  return prisma.userTodos.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
+};

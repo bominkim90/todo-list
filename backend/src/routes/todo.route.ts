@@ -1,7 +1,7 @@
-import { createTodo } from "controller/todo.controller";
+import { createTodo, getTodos } from "../controller/todo.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import { authenticate } from "middlewares/auth.middleware";
+import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -37,14 +37,17 @@ router.post("/", authenticate, createTodo);
  * /todos:
  *   get:
  *     summary: 개인 Todo 조회
- *     tags: [Todos]
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: 조회 성공
+ *         description: 유저의 todo 리스트 반환
+ *       401:
+ *         description: 인증 실패
  */
-router.get("/", (req, res) => {
-  res.status(StatusCodes.OK).json("개인 Todo 조회");
-});
+
+router.get("/", authenticate, getTodos);
 
 /**
  * @swagger
