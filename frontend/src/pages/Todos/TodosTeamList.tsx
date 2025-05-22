@@ -18,7 +18,7 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
 
   // 팀 리스트 정보 갱신
   function fetchTeamList() {
-    // 백엔드 API 연동 시시
+    // 백엔드 API 연동 시
     // axios.get('/team')
     // .then( res => {
     //   console.log("팀 리스트 정보 갱신 성공 ", res);
@@ -27,21 +27,17 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
     // .catch(err => {
     //   console.error("팀 리스트 정보 갱신 실패 ", err);
     // });
-    setTeamBtns(teamArr); // 더미 데이터터
+    setTeamBtns(teamArr); // 더미 데이터
   }
   
   // '팀 목록' 조회 후 -> teamBtns(배열)에 넣기
   useEffect( () => {
     fetchTeamList();
   }, []);
-  
-  // 할일 목록 '버튼 active 클래스' state
-  let [activeTeamBtnId, setActiveTeamBtnId] = useState(0) 
 
-  // '할일 목록 버튼' 클릭 시 
+  // '할일 목록 버튼' 클릭 ( /todos/:teamId GET 요청 )
   async function getTeamTodos(teamId:any = '') {
     console.log("teamId : ", teamId);
-    setActiveTeamBtnId(teamId || 0); // => /todos/:teamId GET 요청
     setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
     fetchTodoList();
   }
@@ -52,21 +48,32 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   // 팀 상세 창 active state
   let [activeTeamDetailPop, setActiveTeamDetailPop] = useState(0);
 
+  // 팀 상세창 pop 오픈
+  function openTeamDetailPop(teamId:any = ''){
+    setActiveTeamDetailPop(teamId);
+    setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
+  }
 
 
   return (
     <div className="todo-teamList">
       {/* '나' 할일 목록 버튼 */}
-      <div className={`btn left blue ${(activeTeamBtnId === 0 ? "active" : "")}`} onClick={ () => {getTeamTodos()} }>할 일 목록</div>
+      <div className={`btn left blue ${(currentTeamId === 0 ? "active" : "")}`} onClick={ () => {getTeamTodos()} }>개인 할 일 목록</div>
       
       {/* '팀' 할일 목록 버튼 */}
       {teamBtns.map( value => {
-        return <div className={`btn left blue ${(activeTeamBtnId === value.teamId ? "active" : "")}`} key={value.teamId} 
-        onClick={ () => { getTeamTodos(value.teamId) } }>
+        return <div className={`btn left blue ${(currentTeamId === value.teamId ? "active" : "")}`} key={value.teamId} 
+        onClick={ (e) => { getTeamTodos(value.teamId); e.stopPropagation() } }>
           팀 {value.teamName}의 할 일 목록
-          <div className="ellipsis" onClick={()=>{setActiveTeamDetailPop(value.teamId)}}>
-            { (activeTeamDetailPop === value.teamId) && <TeamDetail setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} /> }
+
+          {/* 팀원 초대하기 / 팀 삭제하기 버튼 */}
+          <div className="ellipsis" onClick={(e)=>{ openTeamDetailPop(value.teamId); e.stopPropagation(); }}>
+            { 
+              (activeTeamDetailPop === value.teamId) 
+              && <TeamDetail teamName={value.teamName} setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTeamList={fetchTeamList} fetchTodoList={fetchTodoList} /> 
+            }
           </div>
+
         </div>
       }) }
       
