@@ -1,11 +1,15 @@
 import {
   createTeam,
+  createTeamTodo,
   deleteTeam,
+  deleteTeamTodo,
   getMyTeams,
   getTeamById,
   getTeamTodos,
   inviteToTeam,
   removeTeamMember,
+  updateTeamTodoContents,
+  updateTeamTodoStatus,
 } from "../controller/team.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -288,41 +292,20 @@ router.get("/:teamId/todos", authenticate, getTeamTodos);
 /**
  * @swagger
  * /teams/{teamId}/todos:
- *   get:
- *     summary: 팀 Todo 조회
- *     tags: [Teams]
+ *   post:
+ *     summary: 팀 할 일 등록
+ *     tags: [TeamTodo]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: teamId
+ *         in: path
  *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: 팀 Todo 목록 반환
- */
-router.get("/:teamId/todos", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 Todo 조회");
-});
-
-/**
- * @swagger
- * /teams/{teamId}/todos/{todoId}:
- *   put:
- *     summary: 팀 Todo 수정
- *     tags: [Teams]
- *     parameters:
- *       - in: path
- *         name: teamId
- *         required: true
- *         schema:
- *           type: integer
- *       - in: path
- *         name: todoId
- *         required: true
+ *         description: 할 일을 등록할 팀 ID
  *         schema:
  *           type: integer
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -330,37 +313,157 @@ router.get("/:teamId/todos", (req, res) => {
  *             properties:
  *               contents:
  *                 type: string
+ *                 example: 팀 스프린트 준비
+ *     responses:
+ *       201:
+ *         description: 등록 성공
+ *       400:
+ *         description: 유효하지 않은 요청
+ *       403:
+ *         description: 팀원이 아닌 경우
+ */
+
+router.post("/:teamId/todos", authenticate, createTeamTodo);
+
+/**
+ * @swagger
+ * /teams/{teamId}/todos/{todoId}/contents:
+ *   put:
+ *     summary: 팀 Todo 내용 수정
+ *     tags: [TeamTodo]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: teamId
+ *         in: path
+ *         required: true
+ *         description: 팀 ID
+ *         schema:
+ *           type: integer
+ *       - name: todoId
+ *         in: path
+ *         required: true
+ *         description: 수정할 Todo ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               contents:
+ *                 type: string
+ *                 example: 회의 안건 정리
  *     responses:
  *       200:
- *         description: 수정 완료
+ *         description: 내용 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 내용을 수정했습니다.
+ *       400:
+ *         description: 요청값 오류
+ *       403:
+ *         description: 권한 없음
  */
-router.put("/:teamId/todos/:todoId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 Todo 수정");
-});
+router.put(
+  "/:teamId/todos/:todoId/contents",
+  authenticate,
+  updateTeamTodoContents
+);
+
+/**
+ * @swagger
+ * /teams/{teamId}/todos/{todoId}/done:
+ *   put:
+ *     summary: 팀 Todo 완료 상태 수정
+ *     tags: [TeamTodo]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: teamId
+ *         in: path
+ *         required: true
+ *         description: 팀 ID
+ *         schema:
+ *           type: integer
+ *       - name: todoId
+ *         in: path
+ *         required: true
+ *         description: 완료 여부를 수정할 Todo ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               isDone:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: 상태 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 상태를 수정했습니다.
+ *       400:
+ *         description: 요청값 오류
+ *       403:
+ *         description: 권한 없음
+ */
+router.put("/:teamId/todos/:todoId/done", authenticate, updateTeamTodoStatus);
 
 /**
  * @swagger
  * /teams/{teamId}/todos/{todoId}:
  *   delete:
- *     summary: 팀 Todo 삭제
- *     tags: [Teams]
+ *     summary: 팀 할 일 삭제
+ *     tags: [TeamTodo]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: teamId
+ *         in: path
  *         required: true
  *         schema:
  *           type: integer
- *       - in: path
- *         name: todoId
+ *         description: 팀 ID
+ *       - name: todoId
+ *         in: path
  *         required: true
  *         schema:
  *           type: integer
+ *         description: 삭제할 할 일 ID
  *     responses:
  *       200:
- *         description: 삭제 완료
+ *         description: 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 할 일을 삭제했습니다.
+ *       403:
+ *         description: 팀원이 아닌 경우
+ *       404:
+ *         description: 할 일이 없거나 삭제 실패
  */
-router.delete("/:teamId/todos/:todoId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 Todo 삭제");
-});
+router.delete("/:teamId/todos/:todoId", authenticate, deleteTeamTodo);
 
 export default router;

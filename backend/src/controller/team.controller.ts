@@ -1,10 +1,16 @@
-import { createTeamService } from "../services/team.service";
+import {
+  createTeamService,
+  updateTeamTodoContentsService,
+  updateTeamTodoStatusService,
+} from "../services/team.service";
 import { Request, Response } from "express";
 import { getMyTeamsService } from "../services/team.service";
 import { inviteToTeamService } from "../services/team.service";
 import { deleteTeamService } from "../services/team.service";
 import { getTeamByIdService } from "../services/team.service";
 import { getTeamTodosService } from "../services/team.service";
+import { createTeamTodoService } from "../services/team.service";
+import { deleteTeamTodoService } from "../services/team.service";
 
 export const createTeam = async (
   req: Request,
@@ -123,4 +129,97 @@ export const getTeamTodos = async (
   }
 
   res.status(200).json(result.todos);
+};
+
+export const createTeamTodo = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const userId = req.user?.id!;
+  const teamId = Number(req.params.teamId);
+  const { contents } = req.body;
+
+  if (!contents) {
+    res.status(400).json({ message: "내용을 입력해 주세요." });
+    return;
+  }
+
+  const result = await createTeamTodoService(teamId, userId, contents);
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(201).json(result.todo);
+};
+
+export const updateTeamTodoContents = async (req: Request, res: Response) => {
+  const userId = req.user?.id!;
+  const teamId = Number(req.params.teamId);
+  const todoId = Number(req.params.todoId);
+  const { contents } = req.body;
+
+  if (!contents) {
+    res.status(400).json({ message: "내용을 입력해 주세요." });
+    return;
+  }
+
+  const result = await updateTeamTodoContentsService(
+    teamId,
+    todoId,
+    userId,
+    contents
+  );
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json({ message: "내용을 수정했습니다." });
+  return;
+};
+
+export const updateTeamTodoStatus = async (req: Request, res: Response) => {
+  const userId = req.user?.id!;
+  const teamId = Number(req.params.teamId);
+  const todoId = Number(req.params.todoId);
+  const { isDone } = req.body;
+
+  if (typeof isDone !== "boolean") {
+    res.status(400).json({ message: "isDone 값이 잘못되었습니다." });
+    return;
+  }
+
+  const result = await updateTeamTodoStatusService(
+    teamId,
+    todoId,
+    userId,
+    isDone
+  );
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json({ message: "상태를 수정했습니다." });
+  return;
+};
+
+export const deleteTeamTodo = async (req: Request, res: Response) => {
+  const userId = req.user?.id!;
+  const teamId = Number(req.params.teamId);
+  const todoId = Number(req.params.todoId);
+
+  const result = await deleteTeamTodoService(teamId, todoId, userId);
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json({ message: "할 일을 삭제했습니다." });
+  return;
 };

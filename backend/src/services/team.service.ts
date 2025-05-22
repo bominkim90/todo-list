@@ -205,3 +205,126 @@ export const getTeamTodosService = async (teamId: number, userId: string) => {
 
   return { success: true, todos };
 };
+
+export const createTeamTodoService = async (
+  teamId: number,
+  userId: string,
+  contents: string
+) => {
+  // 팀 멤버인지 확인
+  const isMember = await prisma.teamMembers.findUnique({
+    where: {
+      userId_teamId: {
+        userId,
+        teamId,
+      },
+    },
+  });
+
+  if (!isMember) {
+    return {
+      success: false,
+      status: 403,
+      message: "팀에 속한 사용자만 할 일을 등록할 수 있습니다.",
+    };
+  }
+
+  const todo = await prisma.teamTodos.create({
+    data: {
+      teamId,
+      contents,
+    },
+  });
+
+  return {
+    success: true,
+    todo,
+  };
+};
+
+export const updateTeamTodoContentsService = async (
+  teamId: number,
+  todoId: number,
+  userId: string,
+  contents: string
+) => {
+  const isMember = await prisma.teamMembers.findUnique({
+    where: { userId_teamId: { userId, teamId } },
+  });
+
+  if (!isMember) {
+    return {
+      success: false,
+      status: 403,
+      message: "팀에 속한 사용자만 수정할 수 있습니다.",
+    };
+  }
+
+  await prisma.teamTodos.updateMany({
+    where: { id: todoId, teamId },
+    data: { contents },
+  });
+
+  return { success: true };
+};
+
+export const updateTeamTodoStatusService = async (
+  teamId: number,
+  todoId: number,
+  userId: string,
+  isDone: boolean
+) => {
+  const isMember = await prisma.teamMembers.findUnique({
+    where: { userId_teamId: { userId, teamId } },
+  });
+
+  if (!isMember) {
+    return {
+      success: false,
+      status: 403,
+      message: "팀에 속한 사용자만 수정할 수 있습니다.",
+    };
+  }
+
+  await prisma.teamTodos.updateMany({
+    where: { id: todoId, teamId },
+    data: { isDone },
+  });
+
+  return { success: true };
+};
+
+export const deleteTeamTodoService = async (
+  teamId: number,
+  todoId: number,
+  userId: string
+) => {
+  const isMember = await prisma.teamMembers.findUnique({
+    where: { userId_teamId: { userId, teamId } },
+  });
+
+  if (!isMember) {
+    return {
+      success: false,
+      status: 403,
+      message: "팀에 속한 사용자만 삭제할 수 있습니다.",
+    };
+  }
+
+  const result = await prisma.teamTodos.deleteMany({
+    where: {
+      id: todoId,
+      teamId,
+    },
+  });
+
+  if (result.count === 0) {
+    return {
+      success: false,
+      status: 404,
+      message: "할 일을 찾을 수 없습니다.",
+    };
+  }
+
+  return { success: true };
+};
