@@ -2,6 +2,8 @@ import {
   createTeam,
   deleteTeam,
   getMyTeams,
+  getTeamById,
+  getTeamTodos,
   inviteToTeam,
   removeTeamMember,
 } from "../controller/team.controller";
@@ -236,65 +238,52 @@ router.delete("/:teamId/members/:userId", authenticate, removeTeamMember);
 
 /**
  * @swagger
- * /teams/{teamId}:
+ * /teams/{id}:
  *   get:
- *     summary: 팀 상세 조회
- *     tags: [Teams]
+ *     summary: 팀 단일 조회
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: teamId
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
+ *         description: 팀 ID
  *     responses:
  *       200:
  *         description: 팀 정보 반환
+ *       404:
+ *         description: 팀이 존재하지 않음
  */
-router.get("/:teamId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 상세 조회");
-});
-
-/**
- * @swagger
- * /teams:
- *   get:
- *     summary: 팀 목록 조회
- *     tags: [Teams]
- *     responses:
- *       200:
- *         description: 전체 팀 목록 반환
- */
-router.get("/", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 목록 조회");
-});
+router.get("/:id", authenticate, getTeamById);
 
 /**
  * @swagger
  * /teams/{teamId}/todos:
- *   post:
- *     summary: 팀 Todo 등록
- *     tags: [Teams]
+ *   get:
+ *     summary: 팀 Todo 목록 조회
+ *     tags: [TeamTodo]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: teamId
+ *         in: path
  *         required: true
+ *         description: 조회할 팀 ID
  *         schema:
  *           type: integer
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               contents:
- *                 type: string
  *     responses:
- *       201:
- *         description: 등록 완료
+ *       200:
+ *         description: 팀 Todo 리스트 반환
+ *       403:
+ *         description: 팀원이 아닌 경우
+ *       404:
+ *         description: 팀이 존재하지 않음
  */
-router.post("/:teamId/todos", (req, res) => {
-  res.status(StatusCodes.CREATED).json("팀 Todo 등록");
-});
+
+router.get("/:teamId/todos", authenticate, getTeamTodos);
 
 /**
  * @swagger

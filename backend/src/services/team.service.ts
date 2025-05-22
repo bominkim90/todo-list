@@ -172,3 +172,36 @@ export const removeTeamMemberService = async (
 
   return { success: true };
 };
+export const getTeamByIdService = async (teamId: number) => {
+  return prisma.teams.findUnique({
+    where: { id: teamId },
+    include: {
+      members: {
+        select: { userId: true },
+      },
+    },
+  });
+};
+
+export const getTeamTodosService = async (teamId: number, userId: string) => {
+  const isMember = await prisma.teamMembers.findUnique({
+    where: {
+      userId_teamId: { userId, teamId },
+    },
+  });
+
+  if (!isMember) {
+    return {
+      success: false,
+      status: 403,
+      message: "해당 팀에 접근할 수 없습니다.",
+    };
+  }
+
+  const todos = await prisma.teamTodos.findMany({
+    where: { teamId },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return { success: true, todos };
+};

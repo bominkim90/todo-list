@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { getMyTeamsService } from "../services/team.service";
 import { inviteToTeamService } from "../services/team.service";
 import { deleteTeamService } from "../services/team.service";
+import { getTeamByIdService } from "../services/team.service";
+import { getTeamTodosService } from "../services/team.service";
 
 export const createTeam = async (
   req: Request,
@@ -88,4 +90,37 @@ export const removeTeamMember = async (
   }
 
   res.status(200).json({ message: "팀원을 강퇴했습니다." });
+};
+
+export const getTeamById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const teamId = Number(req.params.id);
+
+  const team = await getTeamByIdService(teamId);
+
+  if (!team) {
+    res.status(404).json({ message: "팀이 존재하지 않습니다." });
+    return;
+  }
+
+  res.status(200).json(team);
+};
+
+export const getTeamTodos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const userId = req.user?.id!;
+  const teamId = Number(req.params.teamId);
+
+  const result = await getTeamTodosService(teamId, userId);
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json(result.todos);
 };
