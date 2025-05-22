@@ -88,7 +88,7 @@ router.get("/", authenticate, getTodos);
  *       401:
  *         description: 인증 실패
  */
-router.put("/contents/:id", authenticate, updateTodoContents);
+router.put("/:id/contents", authenticate, updateTodoContents);
 
 /**
  * @swagger
@@ -123,7 +123,7 @@ router.put("/contents/:id", authenticate, updateTodoContents);
  *       401:
  *         description: 인증 실패
  */
-router.put("/done/:id", authenticate, toggleTodoDone);
+router.put("/:id/done", authenticate, toggleTodoDone);
 
 /**
  * @swagger

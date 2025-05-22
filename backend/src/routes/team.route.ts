@@ -1,4 +1,8 @@
-import { createTeam } from "../controller/team.controller";
+import {
+  createTeam,
+  getMyTeams,
+  inviteToTeam,
+} from "../controller/team.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { authenticate } from "../middlewares/auth.middleware";
@@ -36,31 +40,78 @@ router.post("/", authenticate, createTeam);
 
 /**
  * @swagger
- * /teams/{teamId}/invite:
- *   post:
- *     summary: 팀 초대
- *     tags: [Teams]
+ * /teams:
+ *   get:
+ *     summary: 내가 속한 팀 목록 조회
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 팀 목록 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   adminId:
+ *                     type: string
+ *                   members:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         userId:
+ *                           type: string
+ *       401:
+ *         description: 인증 실패
+ */
+
+router.get("/", authenticate, getMyTeams);
+
+/**
+ * @swagger
+ * /teams/{id}/invite:
+ *   put:
+ *     summary: 팀에 유저 초대
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: id
+ *         in: path
  *         required: true
+ *         description: 팀 ID
  *         schema:
  *           type: integer
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               inviteId:
+ *               userId:
  *                 type: string
+ *                 example: "test123"
  *     responses:
  *       200:
  *         description: 초대 성공
+ *       400:
+ *         description: 잘못된 요청
+ *       403:
+ *         description: 권한 없음
+ *       404:
+ *         description: 팀 없음
  */
-router.post("/:teamId/invite", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 초대");
-});
+
+router.put("/:id/invite", authenticate, inviteToTeam);
 
 /**
  * @swagger
