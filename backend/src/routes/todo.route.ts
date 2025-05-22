@@ -1,4 +1,10 @@
-import { createTodo, getTodos } from "../controller/todo.controller";
+import {
+  createTodo,
+  deleteTodo,
+  getTodos,
+  toggleTodoDone,
+  updateTodoContents,
+} from "../controller/todo.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { authenticate } from "../middlewares/auth.middleware";
@@ -51,17 +57,21 @@ router.get("/", authenticate, getTodos);
 
 /**
  * @swagger
- * /todos/{todoId}:
+ * /todos/{id}/contents:
  *   put:
- *     summary: 개인 Todo 수정
- *     tags: [Todos]
+ *     summary: 개인 Todo 내용 수정
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: todoId
+ *       - name: id
+ *         in: path
  *         required: true
+ *         description: 수정할 Todo의 ID
  *         schema:
  *           type: integer
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -69,32 +79,76 @@ router.get("/", authenticate, getTodos);
  *             properties:
  *               contents:
  *                 type: string
+ *                 example: "수정된 내용입니다"
  *     responses:
  *       200:
  *         description: 수정 성공
+ *       400:
+ *         description: 유효하지 않은 요청
+ *       401:
+ *         description: 인증 실패
  */
-router.put("/:todoId", (req, res) => {
-  res.status(StatusCodes.OK).json("개인 Todo 수정");
-});
+router.put("/contents/:id", authenticate, updateTodoContents);
 
 /**
  * @swagger
- * /todos/{todoId}:
+ * /todos/{id}/done:
+ *   put:
+ *     summary: 개인 Todo 완료 상태 수정
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: 상태를 변경할 Todo의 ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               isDone:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: 상태 수정 성공
+ *       400:
+ *         description: 유효하지 않은 요청
+ *       401:
+ *         description: 인증 실패
+ */
+router.put("/done/:id", authenticate, toggleTodoDone);
+
+/**
+ * @swagger
+ * /todos/{id}:
  *   delete:
  *     summary: 개인 Todo 삭제
- *     tags: [Todos]
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: todoId
+ *       - name: id
+ *         in: path
  *         required: true
+ *         description: 삭제할 Todo의 ID
  *         schema:
  *           type: integer
  *     responses:
  *       200:
  *         description: 삭제 성공
+ *       404:
+ *         description: 삭제할 Todo 없음
+ *       401:
+ *         description: 인증 실패
  */
-router.delete("/:todoId", (req, res) => {
-  res.status(StatusCodes.OK).json("개인 Todo 삭제");
-});
+
+router.delete("/:id", authenticate, deleteTodo);
 
 export default router;
