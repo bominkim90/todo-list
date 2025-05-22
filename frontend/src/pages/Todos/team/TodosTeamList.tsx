@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import PopupTeamCreate from "../../Popup/PopTeamCreate";
-import TeamDetail from '../../components/TeamDetail';
+import PopupTeamCreate from "../../../popup/PopTeamCreate";
+import TeamDetail from './TeamDetail';
+// import {getTeamList} from '../../../api/team';
 
 
 // '할일 목록 버튼's / 팀만들기 버튼
@@ -16,30 +16,26 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   ]
 
   // 팀 리스트 정보 갱신
-  function fetchTeamList() {
-    // 백엔드 API 연동 시
-    // axios.get('/team')
-    // .then( res => {
-    //   console.log("팀 리스트 정보 갱신 성공 ", res);
-    //   setTeamBtns(res.data);
-    // })
-    // .catch(err => {
-    //   console.error("팀 리스트 정보 갱신 실패 ", err);
-    // });
+  async function fetchTeamList() {
+    // let result = await getTeamList();
+    // if(result) setTeamBtns(result.data);
     setTeamBtns(teamArr); // 더미 데이터
   }
   
-  // '팀 목록' 조회 후 -> teamBtns(배열)에 넣기
   useEffect( () => {
-    fetchTeamList();
+    fetchTeamList().then();
   }, []);
 
   // '할일 목록 버튼' 클릭 ( /todos/:teamId GET 요청 )
   async function getTeamTodos(teamId:any = '') {
     localStorage.setItem("localStorage_currentTeamId", teamId); // localStorage_currentTeamId 저장
     console.log("teamId : ", teamId);
-    setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
-    fetchTodoList();
+    setCurrentTeamId(teamId || 0);
+    const result = await fetchTodoList();
+    if(result === false) { // 혹시 없는 팀 정보를 조회할 경우
+      setCurrentTeamId(0);
+      await fetchTodoList();
+    }
   }
 
   // '팀 만들기' 버튼 클릭 => 팝업 노출
@@ -54,7 +50,6 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
     setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
   }
 
-
   return (
     <div className="todo-teamList">
       {/* '나' 할일 목록 버튼 */}
@@ -66,7 +61,7 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
         onClick={ (e) => { getTeamTodos(value.teamId); e.stopPropagation() } }>
           팀 {value.teamName}의 할 일 목록
 
-          {/* 팀원 초대하기 / 팀 삭제하기 버튼 */}
+          {/* 팀 상세창 => 팀원 초대하기 / 팀 삭제하기 버튼 */}
           <div className="ellipsis" onClick={(e)=>{ openTeamDetailPop(value.teamId); e.stopPropagation(); }}>
             { 
               (activeTeamDetailPop === value.teamId) 
@@ -80,7 +75,7 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
       {/* 팀 만들기 버튼 */}
       <div className="btn center" onClick={ ()=>{setTeamPopup(true);} }>팀 만들기</div>
       
-      {teamPopup && <PopupTeamCreate setTeamPopup={setTeamPopup}/>}
+      {teamPopup && <PopupTeamCreate setTeamPopup={setTeamPopup} fetchTeamList={fetchTeamList} />}
     </div>
   )
 }

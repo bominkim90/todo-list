@@ -5,12 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // server: {
-  //   proxy: {
-  //     '/auth': {
-  //       target: 'http://localhost:3000', // 실제 백엔드 주소
-  //       changeOrigin: true,
-  //       secure: false
-  //     },
-  //   }
-  // }
+  //   port: 3000, // ← 여기서 포트 번호 설정
+  // },
 })

@@ -1,10 +1,9 @@
 import TodosRegist from "./TodosRegist";
-import TodoRow from "../../components/TodoRow";
-import DoneRow from "../../components/DoneRow";
+import TodoRow from "./TodoRow";
 
 
 // 투두리스트 등록하기 / TO DO 목록 / DONE 목록
-function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:any){
+function TodoList({arr_todoList, currentTeamId, fetchTodoList}:any){
   // 전달 받은 arr_todoList를 두 배열(todo, done 으로 분리)
   let todo:any = [];
   let done:any = [];
@@ -15,18 +14,17 @@ function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:
     else todo.push(value)
   });
   
-  
   return (
     <div className="todo-list">
       {/* 투두리스트 등록하기 */}
-      <TodosRegist arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
+      <TodosRegist currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
 
       {/* TODO 리스트 */}
       <div className='todo-pending'>
         <h3>TO DO</h3>
         {todo.length === 0
           ? <p className="color-gray">할 일 항목이 없습니다.</p>
-          : todo.map( (value:any) => <TodoRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )
+          : todo.map( (value:any) => <TodoRow key={value.todoId} currentTeamId={currentTeamId} value={value} fetchTodoList={fetchTodoList} /> )
         }
       </div>
 
@@ -35,11 +33,11 @@ function TodoList({arr_todoList, currentTeamId, fetchTodoList ,setArr_todoList}:
         <h3>DONE</h3>
         {done.length === 0
           ? <p className="color-gray">할 일 항목이 없습니다.</p>
-          : done.map( (value:any) => <DoneRow value={value} key={value.todoId} fetchTodoList={fetchTodoList} /> )
+          : done.map( (value:any) => <TodoRow key={value.todoId} currentTeamId={currentTeamId} value={value} fetchTodoList={fetchTodoList} /> )
         }
       </div>
     </div>
-)
+  )
 }
 
 export default TodoList;

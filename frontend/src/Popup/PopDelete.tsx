@@ -1,19 +1,6 @@
-import axios from "axios";
 
 
-function PopupTeamCreate({setShowPopDelete, todoId, fetchTodoList}:any) {
-
-  // 투두리스트 삭제 -> DELETE '/todos/{todoId}'
-  function deleteTodo() {
-    console.log("todoId : ", todoId);
-    axios.delete(`/todos/${todoId}`)
-    .then(res => {
-      console.log("투두리스트 삭제 성공 ", res);
-      fetchTodoList();
-    })
-    .catch(err => {console.log("에러 : ", err)});
-  }
-
+function PopupTeamCreate({deleteTodo ,setShowPopDelete}:any) {
 
   return (
     <div className="popup small">
