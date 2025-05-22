@@ -1,11 +1,12 @@
-import TodoList from './Todos/TodoList';
-import TeamBtnList from './Todos/TeamBtnList';
+import TodosList from './todo/TodosList';
+import TodosTeamList from './team/TodosTeamList';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import {getTodo} from '../../api/todos';
 
 
 function Todos() {
-  let [currentTeamId, setCurrentTeamId] = useState(0);
+  const localStorage_currentTeamId = Number(localStorage.getItem("localStorage_currentTeamId")) || 0;
+  let [currentTeamId, setCurrentTeamId] = useState(localStorage_currentTeamId || 0);
   let [arr_todoList, setArr_todoList] = useState<any[]>([]);
 
   // 더미 데이터
@@ -28,11 +29,9 @@ function Todos() {
   ]
 
   // todo 리스트 정보 갱신
-  function fetchTodoList() {
-    // axios.get(`/todos/${currentTeamId || ""}`)
-    // .then( res => {
-    //   setArr_todoList(res.data);
-    // });
+  async function fetchTodoList() {
+    // const result = await getTodo(currentTeamId);
+    // if(result) setArr_todoList(result.data);
     setArr_todoList(myTodos); // 더미 데이터 (나중에 삭제)
   }
 
@@ -45,10 +44,10 @@ function Todos() {
   return (
     <div className="todo-home">
       {/* 팀 목록 */}
-      <TeamBtnList setArr_todoList={setArr_todoList} setCurrentTeamId={setCurrentTeamId} fetchTodoList={fetchTodoList} />
+      <TodosTeamList setArr_todoList={setArr_todoList} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTodoList={fetchTodoList} />
 
       {/* TODO / DONE 리스트 */}
-      <TodoList arr_todoList={arr_todoList} currentTeamId={currentTeamId} setArr_todoList={setArr_todoList} fetchTodoList={fetchTodoList} />
+      <TodosList arr_todoList={arr_todoList} currentTeamId={currentTeamId} fetchTodoList={fetchTodoList} />
     </div>
   )
 }

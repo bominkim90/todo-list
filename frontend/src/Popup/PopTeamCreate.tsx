@@ -1,19 +1,20 @@
-import axios from "axios";
 import { useState } from "react";
+import {postCreateTeam} from '../api/team';
 
-function PopupTeamCreate({setTeamPopup}:any) {
+
+function PopupTeamCreate({setTeamPopup, fetchTeamList}:any) {
   let [teamNameValue, setTeamNameValue] = useState("");
 
-  // 팀 만들기 -> POST '/team'
-  function createTeam() {
+  // 팀 만들기
+  async function createTeam() {
     if(teamNameValue.length === 0) {
       return alert("팀 이름으로 빈 값이 들어갈 수 없습니다.");
     }
-    axios.post('/team', 
-      {
-        teamName: teamNameValue
-      }
-    );
+    const success = await postCreateTeam();
+    if(success) {
+      setTeamPopup(false);
+      await fetchTeamList();
+    }
   }
 
   return (
