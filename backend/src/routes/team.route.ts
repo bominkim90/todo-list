@@ -79,7 +79,7 @@ router.get("/", authenticate, getMyTeams);
  * @swagger
  * /teams/{id}/invite:
  *   put:
- *     summary: 팀에 유저 초대
+ *     summary: 팀에 사용자 초대
  *     tags: [Team]
  *     security:
  *       - bearerAuth: []
@@ -87,7 +87,7 @@ router.get("/", authenticate, getMyTeams);
  *       - name: id
  *         in: path
  *         required: true
- *         description: 팀 ID
+ *         description: 초대할 팀의 ID
  *         schema:
  *           type: integer
  *     requestBody:
@@ -96,19 +96,62 @@ router.get("/", authenticate, getMyTeams);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - userId
  *             properties:
  *               userId:
  *                 type: string
- *                 example: "test123"
+ *                 example: banana456
  *     responses:
  *       200:
  *         description: 초대 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 초대 성공!
+ *                 member:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     userId:
+ *                       type: string
+ *                     teamId:
+ *                       type: integer
  *       400:
- *         description: 잘못된 요청
+ *         description: 잘못된 요청 (이미 팀원이거나 userId 미입력)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 이미 초대된 팀원입니다.!
  *       403:
- *         description: 권한 없음
+ *         description: 권한 없음 (관리자만 초대 가능)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 관리자만 초대할 수 있습니다다.
  *       404:
- *         description: 팀 없음
+ *         description: 팀 또는 사용자 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 초대하려는 사용자가 존재하지 않습니다다.
  */
 
 router.put("/:id/invite", authenticate, inviteToTeam);
