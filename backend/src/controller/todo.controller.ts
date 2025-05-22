@@ -1,75 +1,78 @@
 import { Request, Response } from "express";
-import {
-  createTodoService,
-  getTodosService,
-  updateTodoContentsService,
-  toggleTodoDoneService,
-  deleteTodoService,
-} from "../services/todo.service";
+import { createTodoService, getTodosService } from "../services/todo.service";
 import { StatusCodes } from "http-status-codes";
+import { updateTodoContentsService } from "../services/todo.service";
+import { toggleTodoDoneService } from "../services/todo.service";
+import { deleteTodoService } from "../services/todo.service";
 
 export const createTodo = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const { contents } = req.body;
 
   if (!contents) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "내용을 입력하세요." });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "내용을 입력하세요." });
+    return;
   }
 
   const newTodo = await createTodoService(userId!, contents);
-  return res.status(StatusCodes.CREATED).json(newTodo);
+  res.status(StatusCodes.CREATED).json(newTodo);
+  return;
 };
 
 export const getTodos = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   const todos = await getTodosService(userId!);
-  return res.status(StatusCodes.OK).json(todos);
+  res.status(StatusCodes.OK).json(todos);
 };
 
-export const updateTodoContents = async (req: Request, res: Response) => {
+export const updateTodoContents = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.id;
   const todoId = Number(req.params.id);
   const { contents } = req.body;
 
   if (!contents) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "내용을 입력하세요." });
+    res.status(400).json({ message: "내용을 입력하세요." });
+    return;
   }
 
   const updated = await updateTodoContentsService(todoId, userId!, contents);
-  return res.status(StatusCodes.OK).json(updated);
+  res.status(200).json(updated);
 };
 
-export const toggleTodoDone = async (req: Request, res: Response) => {
+export const toggleTodoDone = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.id;
   const todoId = Number(req.params.id);
   const { isDone } = req.body;
 
   if (typeof isDone !== "boolean") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "isDone 값이 잘못되었습니다." });
+    res.status(400).end();
+    return;
   }
 
   const updated = await toggleTodoDoneService(todoId, userId!, isDone);
-  return res.status(StatusCodes.OK).json(updated);
+  res.status(200).json(updated);
 };
 
-export const deleteTodo = async (req: Request, res: Response) => {
+export const deleteTodo = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.id;
   const todoId = Number(req.params.id);
 
   const deleted = await deleteTodoService(todoId, userId!);
 
   if (deleted.count === 0) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: "삭제할 Todo를 찾을 수 없습니다." });
+    res.status(404).json({ message: "삭제할 Todo를 찾을 수 없습니다." });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "삭제 완료!" });
+  res.status(200).json({ message: "삭제 완료!" });
 };
