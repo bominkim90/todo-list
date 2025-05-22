@@ -1,7 +1,9 @@
 import {
   createTeam,
+  deleteTeam,
   getMyTeams,
   inviteToTeam,
+  removeTeamMember,
 } from "../controller/team.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -158,48 +160,79 @@ router.put("/:id/invite", authenticate, inviteToTeam);
 
 /**
  * @swagger
- * /teams/{teamId}:
+ * /teams/{id}:
  *   delete:
  *     summary: 팀 삭제
- *     tags: [Teams]
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: id
+ *         in: path
  *         required: true
+ *         description: 삭제할 팀 ID
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: 삭제 완료
+ *         description: 팀 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 팀 삭제 완료
+ *       403:
+ *         description: 관리자만 삭제 가능
+ *       404:
+ *         description: 팀이 존재하지 않음
  */
-router.delete("/:teamId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀 삭제");
-});
+
+router.delete("/:id", authenticate, deleteTeam);
 
 /**
  * @swagger
- * /teams/{teamId}/members/{memberId}:
+ * /teams/{teamId}/members/{userId}:
  *   delete:
- *     summary: 팀원 삭제
- *     tags: [Teams]
+ *     summary: 팀원 강퇴
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: teamId
+ *       - name: teamId
+ *         in: path
  *         required: true
  *         schema:
  *           type: integer
- *       - in: path
- *         name: memberId
+ *         description: 팀 ID
+ *       - name: userId
+ *         in: path
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *         description: 강퇴할 사용자 ID
  *     responses:
  *       200:
- *         description: 삭제 완료
+ *         description: 강퇴 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 팀원을 강퇴했습니다.
+ *       400:
+ *         description: 관리자 본인은 강퇴 불가
+ *       403:
+ *         description: 관리자만 강퇴 가능
+ *       404:
+ *         description: 팀 또는 팀원 없음
  */
-router.delete("/:teamId/members/:memberId", (req, res) => {
-  res.status(StatusCodes.OK).json("팀원 삭제");
-});
+
+router.delete("/:teamId/members/:userId", authenticate, removeTeamMember);
 
 /**
  * @swagger

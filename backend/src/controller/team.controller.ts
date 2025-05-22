@@ -2,6 +2,7 @@ import { createTeamService } from "../services/team.service";
 import { Request, Response } from "express";
 import { getMyTeamsService } from "../services/team.service";
 import { inviteToTeamService } from "../services/team.service";
+import { deleteTeamService } from "../services/team.service";
 
 export const createTeam = async (
   req: Request,
@@ -50,4 +51,41 @@ export const inviteToTeam = async (
   }
 
   res.status(200).json({ message: "초대 성공!", member: result.member });
+};
+
+export const deleteTeam = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const teamId = Number(req.params.id);
+  const adminId = req.user?.id!;
+
+  const result = await deleteTeamService(teamId, adminId);
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json({ message: "팀 삭제 완료" });
+};
+
+import { removeTeamMemberService } from "../services/team.service";
+
+export const removeTeamMember = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const teamId = Number(req.params.teamId);
+  const userId = req.params.userId;
+  const adminId = req.user?.id!;
+
+  const result = await removeTeamMemberService(teamId, adminId, userId);
+
+  if (!result.success) {
+    res.status(result.status!).json({ message: result.message });
+    return;
+  }
+
+  res.status(200).json({ message: "팀원을 강퇴했습니다." });
 };
