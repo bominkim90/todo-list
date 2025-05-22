@@ -1,5 +1,7 @@
+import { createTodo } from "controller/todo.controller";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import { authenticate } from "middlewares/auth.middleware";
 
 const router = Router();
 
@@ -28,9 +30,7 @@ const router = Router();
  *         description: 내용 없음
  */
 
-router.post("/", (req, res) => {
-  res.status(StatusCodes.CREATED).json("개인 Todo 등록");
-});
+router.post("/", authenticate, createTodo);
 
 /**
  * @swagger
