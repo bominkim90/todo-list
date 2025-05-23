@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import PopTeamInvite from '../../../popup/PopTeamInvite';
+import PopTeamInvite from '../../../Popup/PopTeamInvite';
 import {deleteTeam} from '../../../api/team';
 
 

@@ -9,13 +9,8 @@ function PopTeamInvite({teamName, setShowPopTeamInvite, currentTeamId}:any) {
   
   // 팀원 조회 (+ state 업데이트)
   async function fetchTeamCrew() {
-    // 더미 데이터
-    setTeamCrewArr([
-      {name : "팀원 1", userId : 1},
-      {name : "팀원 2", userId : 2}
-    ]); 
-    // const result = await getCrewList(currentTeamId);
-    // if(result) setTeamCrewArr(result.data[0].members);
+    const result = await getCrewList(currentTeamId);
+    if(result) setTeamCrewArr(result.data[0].members);
   }
   
   // 팀원 초대 (+ state 업데이트)
