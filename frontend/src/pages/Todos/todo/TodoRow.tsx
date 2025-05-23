@@ -18,6 +18,7 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
     else { // 팀
       success = await putTeamTodo(currentTeamId, value.id, todoContents);
     }
+    console.log("todo 수정 success : ",success);
     if(success) setOnUpdateTodoId(-1);
   }
 
@@ -71,7 +72,7 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
               </>
               : 
               <>
-              <button type='button' className='btn short color-black' onClick={()=>{setOnUpdateTodoId(value.todoId)}}>수정</button>
+              <button type='button' className='btn short color-black' onClick={()=>{setOnUpdateTodoId(value.id)}}>수정</button>
               <button type='button' className='btn short color-red' onClick={()=>{setShowPopDelete(true)}}>삭제</button>
               </>
           } </>
@@ -81,7 +82,7 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
           </>
         }
       </div>
-      {showPopDelete && <PopDelete deleteTodo={deleteTodo} setShowPopDelete={setShowPopDelete} todoId={value.todoId} fetchTodoList={fetchTodoList}/>}
+      {showPopDelete && <PopDelete deleteTodo={deleteTodo} setShowPopDelete={setShowPopDelete} todoId={value.id} fetchTodoList={fetchTodoList}/>}
     </div>
   )
 }

@@ -14,9 +14,12 @@ export async function getTeamList() {
 }
 
 // 팀 '만들기' POST
-export async function postCreateTeam() {
+export async function postCreateTeam(teamNameValue: string) {
   try {
-    const res = await axios.post('/teams');
+    const res = await axios.post('/teams', {
+      name: teamNameValue
+    });
+    console.log("팀 '만들기' POST res : ", res);
     return (res.status === 201);
   }
   catch (err) {
@@ -26,7 +29,7 @@ export async function postCreateTeam() {
 }
 
 // 팀 '삭제' DELETE
-export async function deleteTeam(currentTeamId:any) {
+export async function deleteTeam(currentTeamId:number) {
   try {
     const res = await axios.delete(`/teams/${currentTeamId}`);
     return (res.status === 200);
