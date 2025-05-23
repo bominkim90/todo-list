@@ -17,8 +17,18 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { id, password } = req.body;
     const token = await authService.login(id, password);
-    res.status(StatusCodes.OK).json({ token });
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 1000, // 1시간
+      })
+      .status(StatusCodes.OK)
+      .json({ message: "로그인 성공" });
   } catch (err: any) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: err.message });
+    res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: err.message || "로그인 실패" });
   }
 };
