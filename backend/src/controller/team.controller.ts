@@ -19,19 +19,22 @@ export const createTeam = async (req: Request, res: Response) => {
   const { name } = req.body;
 
   if (!name) {
-    return res
+    res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "팀 이름을 입력해주세요." });
+    return;
   }
 
   const team = await createTeamService(name, userId!);
-  return res.status(StatusCodes.CREATED).json(team);
+  res.status(StatusCodes.CREATED).json(team);
+  return;
 };
 
 export const getMyTeams = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const teams = await getMyTeamsService(userId!);
-  return res.status(StatusCodes.OK).json(teams);
+  res.status(StatusCodes.OK).json(teams);
+  return;
 };
 
 export const inviteToTeam = async (req: Request, res: Response) => {
@@ -40,20 +43,23 @@ export const inviteToTeam = async (req: Request, res: Response) => {
   const { userId } = req.body;
 
   if (!userId) {
-    return res
+    res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "초대할 사용자 ID를 입력해주세요." });
+    return;
   }
 
   const result = await inviteToTeamService(teamId, adminId!, userId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res
+  res
     .status(StatusCodes.OK)
     .json({ message: "초대 성공!", member: result.member });
+  return;
 };
 
 export const deleteTeam = async (req: Request, res: Response) => {
@@ -63,10 +69,12 @@ export const deleteTeam = async (req: Request, res: Response) => {
   const result = await deleteTeamService(teamId, adminId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "팀 삭제 완료" });
+  res.status(StatusCodes.OK).json({ message: "팀 삭제 완료" });
+  return;
 };
 
 export const removeTeamMember = async (req: Request, res: Response) => {
@@ -77,10 +85,11 @@ export const removeTeamMember = async (req: Request, res: Response) => {
   const result = await removeTeamMemberService(teamId, adminId, userId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
-
-  return res.status(StatusCodes.OK).json({ message: "팀원을 강퇴했습니다." });
+  res.status(StatusCodes.OK).json({ message: "팀원을 강퇴했습니다." });
+  return;
 };
 
 export const getTeamById = async (req: Request, res: Response) => {
@@ -88,12 +97,14 @@ export const getTeamById = async (req: Request, res: Response) => {
   const team = await getTeamByIdService(teamId);
 
   if (!team) {
-    return res
+    res
       .status(StatusCodes.NOT_FOUND)
       .json({ message: "팀이 존재하지 않습니다." });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json(team);
+  res.status(StatusCodes.OK).json(team);
+  return;
 };
 
 export const getTeamTodos = async (req: Request, res: Response) => {
@@ -103,10 +114,12 @@ export const getTeamTodos = async (req: Request, res: Response) => {
   const result = await getTeamTodosService(teamId, userId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json(result.todos);
+  res.status(StatusCodes.OK).json(result.todos);
+  return;
 };
 
 export const createTeamTodo = async (req: Request, res: Response) => {
@@ -115,18 +128,21 @@ export const createTeamTodo = async (req: Request, res: Response) => {
   const { contents } = req.body;
 
   if (!contents) {
-    return res
+    res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "내용을 입력해 주세요." });
+    return;
   }
 
   const result = await createTeamTodoService(teamId, userId, contents);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.CREATED).json(result.todo);
+  res.status(StatusCodes.CREATED).json(result.todo);
+  return;
 };
 
 export const updateTeamTodoContents = async (req: Request, res: Response) => {
@@ -136,9 +152,10 @@ export const updateTeamTodoContents = async (req: Request, res: Response) => {
   const { contents } = req.body;
 
   if (!contents) {
-    return res
+    res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "내용을 입력해 주세요." });
+    return;
   }
 
   const result = await updateTeamTodoContentsService(
@@ -149,10 +166,12 @@ export const updateTeamTodoContents = async (req: Request, res: Response) => {
   );
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "내용을 수정했습니다." });
+  res.status(StatusCodes.OK).json({ message: "내용을 수정했습니다." });
+  return;
 };
 
 export const updateTeamTodoStatus = async (req: Request, res: Response) => {
@@ -163,10 +182,12 @@ export const updateTeamTodoStatus = async (req: Request, res: Response) => {
   const result = await updateTeamTodoStatusService(teamId, todoId, userId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "상태를 수정했습니다." });
+  res.status(StatusCodes.OK).json({ message: "상태를 수정했습니다." });
+  return;
 };
 
 export const deleteTeamTodo = async (req: Request, res: Response) => {
@@ -177,8 +198,10 @@ export const deleteTeamTodo = async (req: Request, res: Response) => {
   const result = await deleteTeamTodoService(teamId, todoId, userId);
 
   if (!result.success) {
-    return res.status(result.status!).json({ message: result.message });
+    res.status(result.status!).json({ message: result.message });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "할 일을 삭제했습니다." });
+  res.status(StatusCodes.OK).json({ message: "할 일을 삭제했습니다." });
+  return;
 };

@@ -13,20 +13,21 @@ export const createTodo = async (req: Request, res: Response) => {
   const { contents } = req.body;
 
   if (!contents) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "내용을 입력하세요." });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "내용을 입력하세요." });
+    return;
   }
 
   const newTodo = await createTodoService(userId!, contents);
-  return res.status(StatusCodes.CREATED).json(newTodo);
+  res.status(StatusCodes.CREATED).json(newTodo);
+  return;
 };
 
 export const getTodos = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   const todos = await getTodosService(userId!);
-  return res.status(StatusCodes.OK).json(todos);
+  res.status(StatusCodes.OK).json(todos);
+  return;
 };
 
 export const updateTodoContents = async (req: Request, res: Response) => {
@@ -35,13 +36,13 @@ export const updateTodoContents = async (req: Request, res: Response) => {
   const { contents } = req.body;
 
   if (!contents) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "내용을 입력하세요." });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "내용을 입력하세요." });
+    return;
   }
 
   const updated = await updateTodoContentsService(todoId, userId!, contents);
-  return res.status(StatusCodes.OK).json(updated);
+  res.status(StatusCodes.OK).json(updated);
+  return;
 };
 
 export const toggleTodoDone = async (req: Request, res: Response) => {
@@ -60,10 +61,12 @@ export const deleteTodo = async (req: Request, res: Response) => {
   const deleted = await deleteTodoService(todoId, userId!);
 
   if (deleted.count === 0) {
-    return res
+    res
       .status(StatusCodes.NOT_FOUND)
       .json({ message: "삭제할 Todo를 찾을 수 없습니다." });
+    return;
   }
 
-  return res.status(StatusCodes.OK).json({ message: "삭제 완료!" });
+  res.status(StatusCodes.OK).json({ message: "삭제 완료!" });
+  return;
 };
