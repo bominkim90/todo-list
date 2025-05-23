@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route";
 import todoRouter from "./routes/todo.route";
 import teamRouter from "./routes/team.route";
@@ -10,6 +11,7 @@ import { swaggerSpec } from "./swagger";
 
 dotenv.config();
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 app.use(
@@ -20,6 +22,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
