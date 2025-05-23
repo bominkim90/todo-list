@@ -37,7 +37,7 @@ function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDe
       <div onClick={()=>{setShowPopTeamInvite(true); setActiveTeamDetailPop(0);}}>초대하기</div>
       <div onClick={tryDeleteTeam}>삭제하기</div>
 
-      {showPopTeamInvite && <PopTeamInvite teamName={teamValue} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
+      {showPopTeamInvite && <PopTeamInvite teamValue={teamValue} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
     </div>
   )
 }

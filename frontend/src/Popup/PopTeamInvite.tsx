@@ -18,7 +18,7 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
     if(userId.length === 0) {
       return alert("초대할 아이디를 입력해주세요.");
     }
-    const result = await putCrew(userId);
+    const result = await putCrew(currentTeamId ,userId);
     if(result) await fetchTeamCrew();
   }
 
@@ -50,7 +50,7 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
           
           <ul className="list-text">
             {teamCrewArr.map( (value:any, index:any) => 
-              {return <li key={index /*value.teamCrewId*/}>
+              {return <li key={index /* value.teamCrewId*/}>
                 <span>{value.userId}</span>
                 <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i>
               </li>}

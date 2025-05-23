@@ -54,9 +54,11 @@ export async function getCrewList(currentTeamId: any) {
 }
 
 // 팀원 초대 
-export async function putCrew(crewId: any) {
+export async function putCrew(currentTeamId:any ,crewId: any) {
   try {
-    const res = await axios.put(`/teams/${crewId}/invite`);
+    const res = await axios.put(`/teams/${currentTeamId}/invite`, {
+      userId : crewId
+    });
     return (res.status === 200);
   }
   catch (err) {
