@@ -4,7 +4,7 @@ import {deleteTeam} from '../../../api/team';
 
 
 // 팀 상세창 (팀 삭제 / 팀원 초대하기 팝업)
-function TeamDetail({teamName ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList}:any) {
+function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList}:any) {
   let [showPopTeamInvite, setShowPopTeamInvite] = useState(false); // 팀원 초대하기 pop 보이기
  
   // 팀 '삭제'
@@ -37,7 +37,7 @@ function TeamDetail({teamName ,currentTeamId, setCurrentTeamId, setActiveTeamDet
       <div onClick={()=>{setShowPopTeamInvite(true); setActiveTeamDetailPop(0);}}>초대하기</div>
       <div onClick={tryDeleteTeam}>삭제하기</div>
 
-      {showPopTeamInvite && <PopTeamInvite teamName={teamName} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
+      {showPopTeamInvite && <PopTeamInvite teamName={teamValue} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
     </div>
   )
 }
