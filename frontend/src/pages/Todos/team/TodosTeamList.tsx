@@ -23,11 +23,10 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   // '할일 목록 버튼' 클릭 ( /todos/:teamId GET 요청 )
   async function getTeamTodos(teamId:any = '') {
     localStorage.setItem("localStorage_currentTeamId", teamId); // localStorage_currentTeamId 저장
-    await setCurrentTeamId(teamId || 0);
-    // if(result === false) { // 혹시 없는 팀 정보를 조회할 경우
-    //   setCurrentTeamId(0);
-    //   await fetchTodoList();
-    // }
+    const result = await setCurrentTeamId(teamId || 0);
+    if(result === false) { // 혹시 없는 팀 정보를 조회할 경우
+      setCurrentTeamId(0);
+    }
   }
   useEffect(()=>{
     fetchTodoList();
@@ -60,7 +59,7 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
           <div className="ellipsis" onClick={(e)=>{ openTeamDetailPop(value.id); e.stopPropagation(); }}>
             { 
               (activeTeamDetailPop === value.id) 
-              && <TeamDetail teamName={value.name} setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTeamList={fetchTeamList} fetchTodoList={fetchTodoList} /> 
+              && <TeamDetail teamValue={value} setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTeamList={fetchTeamList} fetchTodoList={fetchTodoList} /> 
             }
           </div>
 

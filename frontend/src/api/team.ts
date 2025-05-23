@@ -60,7 +60,7 @@ export async function putCrew(crewId: any) {
     return (res.status === 200);
   }
   catch (err) {
-    console.error("팀원 목록 GET 실패 ", err);
+    console.error("팀원 초대 PUT 실패 ", err);
     return false;
   }
 }
@@ -72,7 +72,7 @@ export async function deleteCrew(currentTeamId: any, userId:any) {
     return (res.status === 200);
   }
   catch (err) {
-    console.error("팀원 목록 GET 실패 ", err);
+    console.error("팀원 추방 DELETE 실패 ", err);
     return false;
   }
 }
