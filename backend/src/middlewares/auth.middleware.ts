@@ -6,19 +6,20 @@ interface JwtPayload {
 }
 
 export const authenticate: RequestHandler = (req, res, next) => {
-  const token = req.cookies?.token; // 쿠키에서 토큰 추출
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).json({ message: "토큰이 없습니다." });
     return;
   }
 
+  const token = authHeader.split(" ")[1];
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    req.user = { id: decoded.id }; // 명시적으로 객체 할당
+    req.user = decoded;
     next();
-  } catch {
+  } catch (err) {
     res.status(401).json({ message: "유효하지 않은 토큰입니다." });
-    return;
   }
 };

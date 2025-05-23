@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import {
   createTeamService,
   getMyTeamsService,
   inviteToTeamService,
   deleteTeamService,
-  removeTeamMemberService,
   getTeamByIdService,
   getTeamTodosService,
   createTeamTodoService,
   updateTeamTodoContentsService,
   updateTeamTodoStatusService,
   deleteTeamTodoService,
+  removeTeamMemberService,
 } from "../services/team.service";
-import { StatusCodes } from "http-status-codes";
 
 export const createTeam = async (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -30,12 +30,13 @@ export const createTeam = async (req: Request, res: Response) => {
 
 export const getMyTeams = async (req: Request, res: Response) => {
   const userId = req.user?.id;
+
   const teams = await getMyTeamsService(userId!);
   return res.status(StatusCodes.OK).json(teams);
 };
 
 export const inviteToTeam = async (req: Request, res: Response) => {
-  const adminId = req.user?.id;
+  const adminId = req.user?.id!;
   const teamId = Number(req.params.id);
   const { userId } = req.body;
 
@@ -45,7 +46,7 @@ export const inviteToTeam = async (req: Request, res: Response) => {
       .json({ message: "초대할 사용자 ID를 입력해주세요." });
   }
 
-  const result = await inviteToTeamService(teamId, adminId!, userId);
+  const result = await inviteToTeamService(teamId, adminId, userId);
 
   if (!result.success) {
     return res.status(result.status!).json({ message: result.message });
@@ -85,6 +86,7 @@ export const removeTeamMember = async (req: Request, res: Response) => {
 
 export const getTeamById = async (req: Request, res: Response) => {
   const teamId = Number(req.params.id);
+
   const team = await getTeamByIdService(teamId);
 
   if (!team) {

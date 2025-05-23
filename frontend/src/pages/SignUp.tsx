@@ -1,23 +1,30 @@
-import {useState} from 'react';
-import {postSignup} from '../api/auth';
-import { useNavigate } from 'react-router-dom';
+import {useState} from 'react'
+import axios from 'axios'
 
 
 function SignUp() {
-  const navigate = useNavigate();
   const [validationFail, setvalidationFail] = useState(false)
   const [userId, setUserId] = useState('')
   const [userPw, setUserPw] = useState('')
   const [userPw_re, setUserPw_re] = useState('')
-  
-  async function trySignup(){
-    if(userId.length === 0) return alert("아이디를 입력해주세요");
+
+  async function postSignUp(){
+    console.log("userId : ", userId);
+    console.log("userPw : ", userPw);
+    console.log("userPw_re : ", userPw_re);
     if(userPw !== userPw_re) {
       return setvalidationFail(true);
     }
-    const success = await postSignup(userId, userPw);
-    if(success) navigate('/login')
-    else setvalidationFail(true)
+    const res = await axios.post('/login', {
+      id : userId,
+      password : userPw
+    });
+    if(res.status === 200) { // 회원가입 성공
+      window.location.href = '/login'
+    }
+    else { // 회원가입 실패
+      setvalidationFail(true)
+    }
   }
 
   return (
@@ -36,7 +43,7 @@ function SignUp() {
         {validationFail && <p style={{'color':'#EF4444', 'fontSize':'14px','fontWeight':'500','lineHeight':'1.5'}}>비밀번호가 일치하지 않습니다.</p>}
         
         {/* 회원가입 버튼 누르면 => /signUp POST 요청청 */}
-        <button className="btn black" type="button" onClick={trySignup}>회원가입</button>
+        <button className="btn black" type="button" onClick={postSignUp}>회원가입</button>
       </div>
     </div>
   )
