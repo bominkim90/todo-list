@@ -16,11 +16,13 @@ function RegistTodo({fetchTodoList, currentTeamId}:any){
       await postTeamTodo(todoContents, currentTeamId);
     }
     await fetchTodoList();
+    setTodoContents("");
   }
 
   return (
     <div className='input-btn-row'>
-      <input className="input" type="text" placeholder="투두리스트 등록하기" onChange={(e)=>{setTodoContents(e.target.value)}} />
+      <input className="input" type="text" placeholder="투두리스트 등록하기" value={todoContents}
+      onChange={(e)=>{setTodoContents(e.target.value)}} />
       <div className='btn-side'>
         <button type='button' className='btn short black' onClick={createTodo}>등록하기</button>
       </div>

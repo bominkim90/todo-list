@@ -10,9 +10,7 @@ function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDe
   // 팀 '삭제'
   async function tryDeleteTeam() {
     const result = await deleteTeam(currentTeamId);
-    if(result) {
-      setCurrentTeamId(0)
-    }
+    if(result) setCurrentTeamId(0);
   }
   useEffect( ()=>{
     fetchTodoList().then(() => {

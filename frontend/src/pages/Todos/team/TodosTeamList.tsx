@@ -43,6 +43,10 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
     setActiveTeamDetailPop(teamId);
     setCurrentTeamId(teamId || 0); // 현재 팀id 상태값
   }
+  
+  useEffect(()=>{
+    localStorage.setItem("localStorage_currentTeamId", currentTeamId);
+  }, [currentTeamId]);
 
   return (
     <div className="todo-teamList">
