@@ -4,7 +4,7 @@ import axios from '../lib/axios'
 // 로그인 요청
 export async function postLogin(userId: any, userPw: any){
   try {
-    const res = await axios.post('/auto/login', {
+    const res = await axios.post('/auth/login', {
       id : userId,
       password : userPw
     });
@@ -18,7 +18,7 @@ export async function postLogin(userId: any, userPw: any){
 
 export async function postSignup(userId: string, userPw: string){
   try {
-    const res = await axios.post('/auto/signup', {
+    const res = await axios.post('/auth/signup', {
       id : userId,
       password : userPw
     });
