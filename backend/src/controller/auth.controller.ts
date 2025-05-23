@@ -4,12 +4,13 @@ import { StatusCodes } from "http-status-codes";
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const { id, password } = req.body;
     const result = await authService.signup(id, password);
     res.status(StatusCodes.CREATED).json(result);
   } catch (err: any) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: err.message });
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: err.message || "회원가입 실패" });
   }
 };
 
