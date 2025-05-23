@@ -28,14 +28,14 @@ export const updateTodoContentsService = async (
   });
 };
 
-export const toggleTodoDoneService = async (
-  todoId: number,
-  userId: string,
-  isDone: boolean
-) => {
+export const toggleTodoDoneService = async (todoId: number, userId: string) => {
+  const result = await prisma.userTodos.findUnique({
+    where: { id: todoId, userId: userId },
+  });
+  const resultIsdone = !result?.isDone;
   return prisma.userTodos.updateMany({
     where: { id: todoId, userId },
-    data: { isDone },
+    data: { isDone: resultIsdone },
   });
 };
 

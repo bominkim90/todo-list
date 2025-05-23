@@ -47,16 +47,10 @@ export const updateTodoContents = async (req: Request, res: Response) => {
 export const toggleTodoDone = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const todoId = Number(req.params.id);
-  const { isDone } = req.body;
 
-  if (typeof isDone !== "boolean") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "isDone 값이 잘못되었습니다." });
-  }
-
-  const updated = await toggleTodoDoneService(todoId, userId!, isDone);
-  return res.status(StatusCodes.OK).json(updated);
+  const updated = await toggleTodoDoneService(todoId, userId!);
+  res.status(StatusCodes.OK).json(updated);
+  return;
 };
 
 export const deleteTodo = async (req: Request, res: Response) => {

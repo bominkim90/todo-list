@@ -271,8 +271,7 @@ export const updateTeamTodoContentsService = async (
 export const updateTeamTodoStatusService = async (
   teamId: number,
   todoId: number,
-  userId: string,
-  isDone: boolean
+  userId: string
 ) => {
   const isMember = await prisma.teamMembers.findUnique({
     where: { userId_teamId: { userId, teamId } },
@@ -286,9 +285,15 @@ export const updateTeamTodoStatusService = async (
     };
   }
 
+  const result = await prisma.teamTodos.findUnique({
+    where: { id: todoId, teamId: teamId },
+  });
+
+  const resultIsDone = !result?.isDone;
+
   await prisma.teamTodos.updateMany({
     where: { id: todoId, teamId },
-    data: { isDone },
+    data: { isDone: resultIsDone },
   });
 
   return { success: true };

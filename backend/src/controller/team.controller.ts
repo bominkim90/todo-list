@@ -159,20 +159,8 @@ export const updateTeamTodoStatus = async (req: Request, res: Response) => {
   const userId = req.user?.id!;
   const teamId = Number(req.params.teamId);
   const todoId = Number(req.params.todoId);
-  const { isDone } = req.body;
 
-  if (typeof isDone !== "boolean") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "isDone 값이 잘못되었습니다." });
-  }
-
-  const result = await updateTeamTodoStatusService(
-    teamId,
-    todoId,
-    userId,
-    isDone
-  );
+  const result = await updateTeamTodoStatusService(teamId, todoId, userId);
 
   if (!result.success) {
     return res.status(result.status!).json({ message: result.message });
