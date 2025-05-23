@@ -111,6 +111,7 @@ export async function deleteTeamTodo(currentTeamId:any ,todoId:any) {
 export async function putChangeMyTodoDone(todoId:any) {
   try {
     const res = await axios.put(`/todos/${todoId}/done`);
+    console.log("개인 todo 상태변경 res : ", res);
     return (res.status === 200);
   }
   catch (err) {

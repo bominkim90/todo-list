@@ -1,25 +1,17 @@
 import { useState, useEffect } from "react";
-import PopupTeamCreate from "../../../popup/PopTeamCreate";
+import PopupTeamCreate from "../../../Popup/PopTeamCreate";
 import TeamDetail from './TeamDetail';
-// import {getTeamList} from '../../../api/team';
+import {getTeamList} from '../../../api/team';
 
 
 // '할일 목록 버튼's / 팀만들기 버튼
 function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   let [teamBtns, setTeamBtns] = useState<any[]>([]);
 
-  // 더미 데이터 (팀 리스트)
-  let teamArr = [ 
-    {teamId : 1, teamName : "A"},
-    {teamId : 2, teamName : "B"},
-    {teamId : 3, teamName : "C"}
-  ]
-
   // 팀 리스트 정보 갱신
   async function fetchTeamList() {
-    // let result = await getTeamList();
-    // if(result) setTeamBtns(result.data);
-    setTeamBtns(teamArr); // 더미 데이터
+    let result = await getTeamList();
+    if(result) setTeamBtns(result);
   }
   
   useEffect( () => {

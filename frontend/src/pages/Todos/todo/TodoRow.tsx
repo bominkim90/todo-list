@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PopDelete from '../../../popup/PopDelete';
+import PopDelete from '../../../Popup/PopDelete';
 import {putMyTodo, putTeamTodo, deleteMyTodo, deleteTeamTodo, 
   putChangeMyTodoDone, putChangeTeamTodoDone} from '../../../api/todos';
 
