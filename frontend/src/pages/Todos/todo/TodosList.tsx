@@ -7,7 +7,7 @@ function TodoList({arr_todoList, currentTeamId, fetchTodoList}:any){
   // 전달 받은 arr_todoList를 두 배열(todo, done 으로 분리)
   let todo:any = [];
   let done:any = [];
-  console.log("arr_todoList : ",arr_todoList);
+  // console.log("arr_todoList : ",arr_todoList);
   // arr_todoList : '팀 별로(나포함)' 할일 목록에 따른 -> 투두리스트 정보
   arr_todoList.forEach( (value:any) => {
     if(value.isDone) done.push(value)

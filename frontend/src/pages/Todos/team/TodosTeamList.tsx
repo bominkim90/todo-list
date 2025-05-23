@@ -11,7 +11,9 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   // 팀 리스트 정보 갱신
   async function fetchTeamList() {
     let result = await getTeamList();
-    if(result) setTeamBtns(result);
+    if(result) {
+      setTeamBtns(result);
+    }
   }
   
   useEffect( () => {
@@ -21,14 +23,15 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
   // '할일 목록 버튼' 클릭 ( /todos/:teamId GET 요청 )
   async function getTeamTodos(teamId:any = '') {
     localStorage.setItem("localStorage_currentTeamId", teamId); // localStorage_currentTeamId 저장
-    console.log("teamId : ", teamId);
-    setCurrentTeamId(teamId || 0);
-    const result = await fetchTodoList();
-    if(result === false) { // 혹시 없는 팀 정보를 조회할 경우
-      setCurrentTeamId(0);
-      await fetchTodoList();
-    }
+    await setCurrentTeamId(teamId || 0);
+    // if(result === false) { // 혹시 없는 팀 정보를 조회할 경우
+    //   setCurrentTeamId(0);
+    //   await fetchTodoList();
+    // }
   }
+  useEffect(()=>{
+    fetchTodoList();
+  }, [currentTeamId])
 
   // '팀 만들기' 버튼 클릭 => 팝업 노출
   let [teamPopup, setTeamPopup] = useState(false);
@@ -49,15 +52,15 @@ function TodosTeamList({fetchTodoList, currentTeamId ,setCurrentTeamId}:any){
       
       {/* '팀' 할일 목록 버튼 */}
       {teamBtns.map( value => {
-        return <div className={`btn left blue ${(currentTeamId === value.teamId ? "active" : "")}`} key={value.teamId} 
-        onClick={ (e) => { getTeamTodos(value.teamId); e.stopPropagation() } }>
-          팀 {value.teamName}의 할 일 목록
+        return <div className={`btn left blue ${(currentTeamId === value.id ? "active" : "")}`} key={value.id} 
+        onClick={ (e) => { getTeamTodos(value.id); e.stopPropagation() } }>
+          팀 {value.name}의 할 일 목록
 
           {/* 팀 상세창 => 팀원 초대하기 / 팀 삭제하기 버튼 */}
-          <div className="ellipsis" onClick={(e)=>{ openTeamDetailPop(value.teamId); e.stopPropagation(); }}>
+          <div className="ellipsis" onClick={(e)=>{ openTeamDetailPop(value.id); e.stopPropagation(); }}>
             { 
-              (activeTeamDetailPop === value.teamId) 
-              && <TeamDetail teamName={value.teamName} setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTeamList={fetchTeamList} fetchTodoList={fetchTodoList} /> 
+              (activeTeamDetailPop === value.id) 
+              && <TeamDetail teamName={value.name} setActiveTeamDetailPop={setActiveTeamDetailPop} currentTeamId={currentTeamId} setCurrentTeamId={setCurrentTeamId} fetchTeamList={fetchTeamList} fetchTodoList={fetchTodoList} /> 
             }
           </div>
 
