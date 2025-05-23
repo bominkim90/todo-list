@@ -1,16 +1,18 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import {postLogin} from '../api/auth';
 
 
 function Login() {
-  const [validationFail, setValidationFail] = useState(false)
-  const [userId, setUserId] = useState('')
-  const [userPw, setUserPw] = useState('')
+  const navigate = useNavigate();
+  const [validationFail, setValidationFail] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userPw, setUserPw] = useState('');
 
   async function tryLogin(){
     const success = await postLogin(userId, userPw);
-    if(!success) setValidationFail(true)
+    if(success) navigate('/todos')
+    else setValidationFail(true)
   }
 
   return (
