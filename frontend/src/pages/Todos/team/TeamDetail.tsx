@@ -11,11 +11,14 @@ function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDe
   async function tryDeleteTeam() {
     const result = await deleteTeam(currentTeamId);
     if(result) {
-      setCurrentTeamId(0)// activeClass -> '내 할일 목록' 으로 변경
-      await fetchTodoList();// 위에서 teamId 변경 -> '내 할일 목록' 으로 변경
-      await fetchTeamList(); // 팀 목록 갱신
+      setCurrentTeamId(0)
     }
   }
+  useEffect( ()=>{
+    fetchTodoList().then(() => {
+      fetchTeamList();
+    });
+  }, [currentTeamId])
 
   // 팀 상세창 영역 외 click => 닫힘
   const ref = useRef<HTMLDivElement>(null)

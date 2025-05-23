@@ -18,7 +18,6 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
     else { // 팀
       success = await putTeamTodo(currentTeamId, value.id, todoContents);
     }
-    console.log("todo 수정 success : ",success);
     if(success) setOnUpdateTodoId(-1);
   }
 
@@ -34,7 +33,7 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
     if(success) await fetchTodoList();
   }
 
-  // done 상태변경
+  // done 상태 변경
   async function changeIsDone() {
     let success = false;
     if(currentTeamId === 0) {
@@ -45,6 +44,7 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
     }
     if(success) await fetchTodoList();
   }
+
 
   return (
     <div className='input-btn-row'>

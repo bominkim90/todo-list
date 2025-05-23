@@ -15,7 +15,6 @@ function RegistTodo({fetchTodoList, currentTeamId}:any){
     else { // 팀 todo
       await postTeamTodo(todoContents, currentTeamId);
     }
-    console.log("todoContents : ", todoContents);
     await fetchTodoList();
   }
 

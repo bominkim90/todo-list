@@ -6,7 +6,7 @@ import {getCrewList, putCrew, deleteCrew} from '../api/team';
 function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
   let [userId, setUserId] = useState(""); // 팀원 초대 시 => userId 입력
   let [teamCrewArr, setTeamCrewArr] = useState<any[]>([]); // 팀원 목록 state
-  
+  console.log("teamValue : ", teamValue)
   // 팀원 조회 (+ state 업데이트)
   async function fetchTeamCrew() {
     const result = await getCrewList(currentTeamId);
@@ -29,8 +29,13 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
   }
 
   useEffect( ()=>{
-    fetchTeamCrew().then();
-  }, [])
+    fetchTeamCrew()
+  }, []);
+  
+  useEffect( ()=> {
+    console.log("teamCrewArr : ",teamCrewArr)
+  }, [teamCrewArr]);
+
 
   return (
     <div className="popup">
@@ -52,7 +57,10 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
             {teamCrewArr.map( (value:any, index:any) => 
               {return <li key={index /* value.teamCrewId*/}>
                 <span>{value.userId}</span>
-                <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i>
+                { 
+                  teamValue.adminId === value.userId
+                  || <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i>
+                }
               </li>}
             )}
           </ul>

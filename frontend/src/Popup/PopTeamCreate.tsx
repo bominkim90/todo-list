@@ -11,7 +11,6 @@ function PopupTeamCreate({setTeamPopup, fetchTeamList}:any) {
       return alert("팀 이름으로 빈 값이 들어갈 수 없습니다.");
     }
     const success = await postCreateTeam(teamNameValue);
-    console.log("팀 만들기 success : ",success);
     if(success) {
       setTeamPopup(false);
       await fetchTeamList();
