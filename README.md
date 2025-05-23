@@ -1,3 +1,9 @@
+```
+README.md파일 안에서
+다른 md파일 링크 걸기
+[가이드 문서 보기](./docs/guide.md)
+```
+
 ## 프로젝트명 (Project Name)
 
 간단한 한 줄 소개
