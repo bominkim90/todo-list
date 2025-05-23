@@ -11,6 +11,9 @@ function TodoRow({currentTeamId, value, fetchTodoList}: any) {
 
   // todo 수정
   async function completeUpdate() {
+    if(value.contents === todoContents) {
+      return alert("수정된 내용이 없습니다.");
+    }
     let success = false;
     if(currentTeamId === 0){ // 개인
       success = await putMyTodo(value.id, todoContents);

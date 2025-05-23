@@ -19,6 +19,7 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
     }
     const result = await putCrew(currentTeamId ,userId);
     if(result) await fetchTeamCrew();
+    else alert("존재하지 않는 id 이거나, 이미 팀원에 존재하는 id입니다.");
   }
 
   // 팀원 추방 (+ state 업데이트)
@@ -49,13 +50,11 @@ function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
           </div>
           
           <ul className="list-text">
-            {teamCrewArr.map( (value:any, index:any) => 
-              {return <li key={index /* value.teamCrewId*/}>
-                <span>{value.userId}</span>
-                { 
-                  teamValue.adminId === value.userId
-                  || <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i>
-                }
+            {teamCrewArr.map( (value:any) => 
+              {return <li key={value.userId}>
+                <span>{value.userId} {teamValue.adminId === value.userId && "(관리자)"}</span>
+                { teamValue.adminId === value.userId
+                  || <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i> }
               </li>}
             )}
           </ul>

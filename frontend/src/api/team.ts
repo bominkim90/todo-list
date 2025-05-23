@@ -19,7 +19,6 @@ export async function postCreateTeam(teamNameValue: string) {
     const res = await axios.post('/teams', {
       name: teamNameValue
     });
-    console.log("팀 '만들기' POST res : ", res);
     return (res.status === 201);
   }
   catch (err) {

@@ -1,5 +1,3 @@
-// src/lib/axios.ts
-
 import axios from "axios"
 
 
@@ -12,11 +10,15 @@ const instance = axios.create({
 instance.interceptors.response.use(
   response => response,
   error => {
-    if (error.response?.status === 401) {
+    const originalRequest = error.config;
+
+    // 401 에러 && 요청 URL이 /login이 아닐 경우만 리다이랙트
+    if ( error.response?.status === 401 && !originalRequest.url.include("/login") ) {
       window.location.href = "/login"
     }
     return Promise.reject(error)
   }
-)
+);
 
-export default instance
+
+export default instance;
