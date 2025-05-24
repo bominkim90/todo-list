@@ -10,6 +10,29 @@
 
 ---
 
+## 📁 폴더 구조
+```
+public/
+└── icons/           # 정적 자산 (SVG 아이콘 등)
+
+src/
+├── pages/           # 주요 화면 단위 컴포넌트 (Login, Register, Todos)
+├── api/             # 백엔드 서버에 API 요청
+│   ├── auth.ts      # 회원가입, 로그인
+│   ├── team.ts      # 팀 조회, 만들기, 삭제
+│   └── todos.ts     # todo 리스트 조회, 등록, 수정, 삭제
+├── util/
+│   └── LoginCheck.tsx # 인증 여부 확인 컴포넌트
+├── lib/
+│   └── axios.ts       # 전역 Axios 인스턴스 설정
+├── index.css        # 전체 프로젝트에 적용되는 전역 스타일
+├── App.tsx          # 최상위 라우터 및 전체 구조 컴포넌트
+└── main.tsx         # React DOM 렌더링 및 앱 진입점
+```
+
+
+---
+
 ## 📡 API 연동 방식
 
 - **Axios 전역 인스턴스 (`lib/axios.ts`)**
@@ -20,13 +43,6 @@
   - auth.ts → `postLogin`, `postRegister` 등
   - team.ts → `getTeamList`, `postTeam` 등
   - todos.ts → `getTodos`, `postTodo`, `putTodo`, `deleteTodo` 등
-
----
-
-## 🧠 개발 시 고려 사항
-
-- `useNavigate` 등 훅은 최상단에서 호출하도록 구조 설계
-- 인증 체크 로직은 `LoginCheck` 컴포넌트로 분리하여 필요한 페이지에만 적용 가능하도록 구성
 
 ---
 
