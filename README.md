@@ -1,9 +1,3 @@
-```
-README.md파일 안에서
-다른 md파일 링크 걸기
-[가이드 문서 보기](./docs/guide.md)
-```
-
 ## 프로젝트명 (Project Name)
 
 팀 기반 To-Do List 웹 애플리케이션션
@@ -59,10 +53,10 @@ docs/images/todo_list.png
 
 ## 팀원 소개 (Contributors)
 
-| 이름     | 역할            | GitHub                                                         |
-| -------- | --------------- | -------------------------------------------------------------- |
-| 김보민민 | 프론트엔드 개발 | [https://github.com/bominkim90](https://github.com/bominkim90) |
-| 이정찬   | 백엔드 개발     | [https://github.com/chan3199](https://github.com/chan3199)     |
+| 이름   | 역할            | GitHub                                                         |
+| ------ | --------------- | -------------------------------------------------------------- |
+| 김보민 | 프론트엔드 개발 | [https://github.com/bominkim90](https://github.com/bominkim90) |
+| 이정찬 | 백엔드 개발     | [https://github.com/chan3199](https://github.com/chan3199)     |
 
 ---
 
