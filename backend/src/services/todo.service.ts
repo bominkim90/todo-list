@@ -1,11 +1,17 @@
 import { prisma } from "../prisma/client";
+import {
+  CreateTodoDTO,
+  UpdateTodoContentsDTO,
+  ToggleTodoStatusDTO,
+  DeleteTodoDTO,
+} from "../dtos/todo.dto";
 
-export const createTodoService = async (userId: string, contents: string) => {
+export const createTodoService = async ({
+  userId,
+  contents,
+}: CreateTodoDTO) => {
   return prisma.userTodos.create({
-    data: {
-      userId,
-      contents,
-    },
+    data: { userId, contents },
   });
 };
 
@@ -16,25 +22,26 @@ export const getTodosService = async (userId: string) => {
   });
 };
 
-export const updateTodoContentsService = async (
-  todoId: number,
-  userId: string,
-  contents: string
-) => {
+export const updateTodoContentsService = async ({
+  todoId,
+  userId,
+  contents,
+}: UpdateTodoContentsDTO) => {
   return prisma.userTodos.update({
     where: { id: todoId },
     data: { contents },
   });
 };
 
-export const toggleTodoDoneService = async (todoId: number, userId: string) => {
+export const toggleTodoDoneService = async ({
+  todoId,
+  userId,
+}: ToggleTodoStatusDTO) => {
   const todo = await prisma.userTodos.findFirst({
     where: { id: todoId, userId },
   });
 
-  if (!todo) {
-    throw new Error("해당 Todo를 찾을 수 없습니다.");
-  }
+  if (!todo) throw new Error("해당 Todo를 찾을 수 없습니다.");
 
   return prisma.userTodos.update({
     where: { id: todoId },
@@ -42,7 +49,7 @@ export const toggleTodoDoneService = async (todoId: number, userId: string) => {
   });
 };
 
-export const deleteTodoService = async (todoId: number, userId: string) => {
+export const deleteTodoService = async ({ todoId, userId }: DeleteTodoDTO) => {
   return prisma.userTodos.delete({
     where: { id: todoId },
   });

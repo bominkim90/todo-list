@@ -1,4 +1,15 @@
 import { prisma } from "../prisma/client";
+import {
+  CreateTeamDTO,
+  InviteToTeamDTO,
+  DeleteTeamDTO,
+  RemoveTeamMemberDTO,
+  GetTeamTodosDTO,
+  CreateTeamTodoDTO,
+  UpdateTeamTodoContentsDTO,
+  UpdateTeamTodoStatusDTO,
+  DeleteTeamTodoDTO,
+} from "../dtos/team.dto";
 
 const getTeamAndVerifyAdmin = async (teamId: number, adminId: string) => {
   const team = await prisma.teams.findUnique({
@@ -6,10 +17,8 @@ const getTeamAndVerifyAdmin = async (teamId: number, adminId: string) => {
     include: { members: true },
   });
 
-  if (!team) {
+  if (!team)
     return { valid: false, status: 404, message: "팀이 존재하지 않습니다." };
-  }
-
   if (team.adminId !== adminId) {
     return {
       valid: false,
@@ -27,51 +36,36 @@ const isTeamMember = async (userId: string, teamId: number) => {
   });
 };
 
-export const createTeamService = async (name: string, adminId: string) => {
+export const createTeamService = async ({ name, adminId }: CreateTeamDTO) => {
   return prisma.teams.create({
     data: {
       name,
       adminId,
-      members: {
-        create: {
-          userId: adminId,
-        },
-      },
+      members: { create: { userId: adminId } },
     },
-    include: {
-      members: true,
-    },
+    include: { members: true },
   });
 };
 
 export const getMyTeamsService = async (userId: string) => {
   return prisma.teams.findMany({
-    where: {
-      members: {
-        some: { userId },
-      },
-    },
-    include: {
-      members: {
-        select: { userId: true },
-      },
-    },
+    where: { members: { some: { userId } } },
+    include: { members: { select: { userId: true } } },
   });
 };
 
-export const inviteToTeamService = async (
-  teamId: number,
-  adminId: string,
-  userId: string
-) => {
+export const inviteToTeamService = async ({
+  teamId,
+  adminId,
+  userId,
+}: InviteToTeamDTO) => {
   const { valid, team, status, message } = await getTeamAndVerifyAdmin(
     teamId,
     adminId
   );
   if (!valid) return { success: false, status, message };
 
-  const alreadyMember = team!.members.find((m) => m.userId === userId);
-  if (alreadyMember) {
+  if (team!.members.find((m) => m.userId === userId)) {
     return { success: false, status: 400, message: "이미 초대된 팀원입니다." };
   }
 
@@ -84,14 +78,11 @@ export const inviteToTeamService = async (
     };
   }
 
-  const member = await prisma.teamMembers.create({
-    data: { userId, teamId },
-  });
-
+  const member = await prisma.teamMembers.create({ data: { userId, teamId } });
   return { success: true, member };
 };
 
-export const deleteTeamService = async (teamId: number, adminId: string) => {
+export const deleteTeamService = async ({ teamId, adminId }: DeleteTeamDTO) => {
   const { valid, status, message } = await getTeamAndVerifyAdmin(
     teamId,
     adminId
@@ -102,17 +93,16 @@ export const deleteTeamService = async (teamId: number, adminId: string) => {
   return { success: true };
 };
 
-export const removeTeamMemberService = async (
-  teamId: number,
-  adminId: string,
-  userId: string
-) => {
+export const removeTeamMemberService = async ({
+  teamId,
+  adminId,
+  userId,
+}: RemoveTeamMemberDTO) => {
   const { valid, status, message } = await getTeamAndVerifyAdmin(
     teamId,
     adminId
   );
   if (!valid) return { success: false, status, message };
-
   if (adminId === userId) {
     return {
       success: false,
@@ -136,30 +126,23 @@ export const removeTeamMemberService = async (
   await prisma.teamMembers.delete({
     where: { userId_teamId: { userId, teamId } },
   });
-
   return { success: true };
 };
 
 export const getTeamByIdService = async (teamId: number) => {
   return prisma.teams.findUnique({
     where: { id: teamId },
-    include: {
-      members: {
-        select: { userId: true },
-      },
-    },
+    include: { members: { select: { userId: true } } },
   });
 };
 
-export const getTeamTodosService = async (teamId: number, userId: string) => {
+export const getTeamTodosService = async ({
+  teamId,
+  userId,
+}: GetTeamTodosDTO) => {
   const member = await isTeamMember(userId, teamId);
-  if (!member) {
-    return {
-      success: false,
-      status: 403,
-      message: "해당 팀에 접근할 수 없습니다.",
-    };
-  }
+  if (!member)
+    return { success: false, status: 403, message: "접근 권한 없음" };
 
   const todos = await prisma.teamTodos.findMany({
     where: { teamId },
@@ -169,75 +152,44 @@ export const getTeamTodosService = async (teamId: number, userId: string) => {
   return { success: true, todos };
 };
 
-export const createTeamTodoService = async (
-  teamId: number,
-  userId: string,
-  contents: string
-) => {
+export const createTeamTodoService = async ({
+  teamId,
+  userId,
+  contents,
+}: CreateTeamTodoDTO) => {
   const member = await isTeamMember(userId, teamId);
-  if (!member) {
-    return {
-      success: false,
-      status: 403,
-      message: "팀에 속한 사용자만 등록할 수 있습니다.",
-    };
-  }
+  if (!member)
+    return { success: false, status: 403, message: "등록 권한 없음" };
 
-  const todo = await prisma.teamTodos.create({
-    data: { teamId, contents },
-  });
-
+  const todo = await prisma.teamTodos.create({ data: { teamId, contents } });
   return { success: true, todo };
 };
 
-export const updateTeamTodoContentsService = async (
-  teamId: number,
-  todoId: number,
-  userId: string,
-  contents: string
-) => {
+export const updateTeamTodoContentsService = async ({
+  teamId,
+  todoId,
+  userId,
+  contents,
+}: UpdateTeamTodoContentsDTO) => {
   const member = await isTeamMember(userId, teamId);
-  if (!member) {
-    return {
-      success: false,
-      status: 403,
-      message: "팀에 속한 사용자만 수정할 수 있습니다.",
-    };
-  }
+  if (!member)
+    return { success: false, status: 403, message: "수정 권한 없음" };
 
-  await prisma.teamTodos.update({
-    where: { id: todoId },
-    data: { contents },
-  });
-
+  await prisma.teamTodos.update({ where: { id: todoId }, data: { contents } });
   return { success: true };
 };
 
-export const updateTeamTodoStatusService = async (
-  teamId: number,
-  todoId: number,
-  userId: string
-) => {
+export const updateTeamTodoStatusService = async ({
+  teamId,
+  todoId,
+  userId,
+}: UpdateTeamTodoStatusDTO) => {
   const member = await isTeamMember(userId, teamId);
-  if (!member) {
-    return {
-      success: false,
-      status: 403,
-      message: "팀에 속한 사용자만 수정할 수 있습니다.",
-    };
-  }
+  if (!member)
+    return { success: false, status: 403, message: "수정 권한 없음" };
 
-  const todo = await prisma.teamTodos.findUnique({
-    where: { id: todoId },
-  });
-
-  if (!todo) {
-    return {
-      success: false,
-      status: 404,
-      message: "할 일을 찾을 수 없습니다.",
-    };
-  }
+  const todo = await prisma.teamTodos.findUnique({ where: { id: todoId } });
+  if (!todo) return { success: false, status: 404, message: "할 일 없음" };
 
   await prisma.teamTodos.update({
     where: { id: todoId },
@@ -247,30 +199,19 @@ export const updateTeamTodoStatusService = async (
   return { success: true };
 };
 
-export const deleteTeamTodoService = async (
-  teamId: number,
-  todoId: number,
-  userId: string
-) => {
+export const deleteTeamTodoService = async ({
+  teamId,
+  todoId,
+  userId,
+}: DeleteTeamTodoDTO) => {
   const member = await isTeamMember(userId, teamId);
-  if (!member) {
-    return {
-      success: false,
-      status: 403,
-      message: "팀에 속한 사용자만 삭제할 수 있습니다.",
-    };
-  }
+  if (!member)
+    return { success: false, status: 403, message: "삭제 권한 없음" };
 
   try {
-    await prisma.teamTodos.delete({
-      where: { id: todoId },
-    });
+    await prisma.teamTodos.delete({ where: { id: todoId } });
     return { success: true };
   } catch {
-    return {
-      success: false,
-      status: 404,
-      message: "할 일을 찾을 수 없습니다.",
-    };
+    return { success: false, status: 404, message: "할 일 없음" };
   }
 };

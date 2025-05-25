@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service";
 import { StatusCodes } from "http-status-codes";
+import { SignupDTO, LoginDTO } from "../dtos/auth.dto";
+
+const MAX_AGE = 60 * 60 * 1000; // 1시간간
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { id, password } = req.body;
-    const result = await authService.signup(id, password);
+    const signupData: SignupDTO = req.body;
+    const result = await authService.signup(signupData);
+
     res.status(StatusCodes.CREATED).json(result);
   } catch (err: any) {
     res
@@ -16,14 +20,14 @@ export const signup = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { id, password } = req.body;
-    const token = await authService.login(id, password);
+    const loginData: LoginDTO = req.body;
+    const token = await authService.login(loginData);
 
     res
       .cookie("token", token, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 60 * 60 * 1000, // 1시간
+        maxAge: MAX_AGE,
       })
       .status(StatusCodes.OK)
       .json({ message: "로그인 성공" });
