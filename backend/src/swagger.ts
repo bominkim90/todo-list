@@ -10,11 +10,11 @@ export const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        url: "http://localhost:3000", // .env 기반으로 추후 교체 가능 여부
+        url: "http://localhost:3000",
       },
     ],
   },
-  apis: ["./src/routes/*.ts"], // 라우터 파일에 Swagger 주석 작성하면 여기서 읽는다.
+  apis: ["./src/routes/*.ts"],
   components: {
     securitySchemes: {
       bearerAuth: {
