@@ -1,12 +1,13 @@
 import { prisma } from "../prisma/client";
 import { hashPassword, validatePassword } from "../lib/password";
 import { generateToken } from "../lib/jwt";
+import { SignupDTO, LoginDTO } from "../dtos/auth.dto";
 
 const findUserById = async (id: string) => {
   return prisma.users.findUnique({ where: { id } });
 };
 
-export const signup = async (id: string, password: string) => {
+export const signup = async ({ id, password }: SignupDTO) => {
   const existingUser = await findUserById(id);
   if (existingUser) throw new Error("이미 존재하는 ID입니다.");
 
@@ -22,7 +23,7 @@ export const signup = async (id: string, password: string) => {
   return { id: newUser.id };
 };
 
-export const login = async (id: string, password: string) => {
+export const login = async ({ id, password }: LoginDTO) => {
   const user = await findUserById(id);
   if (!user) throw new Error("존재하지 않는 사용자입니다.");
 
