@@ -3,6 +3,8 @@ import * as authService from "../services/auth.service";
 import { StatusCodes } from "http-status-codes";
 import { SignupDTO, LoginDTO } from "../dtos/auth.dto";
 
+const MAX_AGE = 60 * 60 * 1000; // 1시간간
+
 export const signup = async (req: Request, res: Response) => {
   try {
     const signupData: SignupDTO = req.body;
@@ -25,7 +27,7 @@ export const login = async (req: Request, res: Response) => {
       .cookie("token", token, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 60 * 60 * 1000, // 1시간
+        maxAge: MAX_AGE,
       })
       .status(StatusCodes.OK)
       .json({ message: "로그인 성공" });
