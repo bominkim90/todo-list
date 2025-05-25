@@ -60,7 +60,7 @@ export const deleteTodo = async (req: Request, res: Response) => {
 
   const deleted = await deleteTodoService(todoId, userId!);
 
-  if (deleted.count === 0) {
+  if (!deleted) {
     res
       .status(StatusCodes.NOT_FOUND)
       .json({ message: "삭제할 Todo를 찾을 수 없습니다." });
