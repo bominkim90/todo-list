@@ -14,9 +14,11 @@ export async function getTeamList() {
 }
 
 // 팀 '만들기' POST
-export async function postCreateTeam() {
+export async function postCreateTeam(teamNameValue: string) {
   try {
-    const res = await axios.post('/teams');
+    const res = await axios.post('/teams', {
+      name: teamNameValue
+    });
     return (res.status === 201);
   }
   catch (err) {
@@ -26,7 +28,7 @@ export async function postCreateTeam() {
 }
 
 // 팀 '삭제' DELETE
-export async function deleteTeam(currentTeamId:any) {
+export async function deleteTeam(currentTeamId:number) {
   try {
     const res = await axios.delete(`/teams/${currentTeamId}`);
     return (res.status === 200);
@@ -51,13 +53,15 @@ export async function getCrewList(currentTeamId: any) {
 }
 
 // 팀원 초대 
-export async function putCrew(crewId: any) {
+export async function putCrew(currentTeamId:any ,crewId: any) {
   try {
-    const res = await axios.put(`/teams/${crewId}/invite`);
+    const res = await axios.put(`/teams/${currentTeamId}/invite`, {
+      userId : crewId
+    });
     return (res.status === 200);
   }
   catch (err) {
-    console.error("팀원 목록 GET 실패 ", err);
+    console.error("팀원 초대 PUT 실패 ", err);
     return false;
   }
 }
@@ -69,7 +73,7 @@ export async function deleteCrew(currentTeamId: any, userId:any) {
     return (res.status === 200);
   }
   catch (err) {
-    console.error("팀원 목록 GET 실패 ", err);
+    console.error("팀원 추방 DELETE 실패 ", err);
     return false;
   }
 }

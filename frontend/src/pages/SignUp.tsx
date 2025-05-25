@@ -17,7 +17,7 @@ function SignUp() {
     }
     const success = await postSignup(userId, userPw);
     if(success) navigate('/login')
-    else setvalidationFail(true)
+    else alert("중복된 id 입니다.");
   }
 
   return (
@@ -35,7 +35,7 @@ function SignUp() {
 
         {validationFail && <p style={{'color':'#EF4444', 'fontSize':'14px','fontWeight':'500','lineHeight':'1.5'}}>비밀번호가 일치하지 않습니다.</p>}
         
-        {/* 회원가입 버튼 누르면 => /signUp POST 요청청 */}
+        {/* 회원가입 버튼 누르면 => /signUp POST 요청 */}
         <button className="btn black" type="button" onClick={trySignup}>회원가입</button>
       </div>
     </div>

@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import PopTeamInvite from '../../../popup/PopTeamInvite';
+import PopTeamInvite from '../../../Popup/PopTeamInvite';
 import {deleteTeam} from '../../../api/team';
 
 
 // 팀 상세창 (팀 삭제 / 팀원 초대하기 팝업)
-function TeamDetail({teamName ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList}:any) {
+function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList}:any) {
   let [showPopTeamInvite, setShowPopTeamInvite] = useState(false); // 팀원 초대하기 pop 보이기
  
   // 팀 '삭제'
   async function tryDeleteTeam() {
     const result = await deleteTeam(currentTeamId);
-    if(result) {
-      setCurrentTeamId(0)// activeClass -> '내 할일 목록' 으로 변경
-      await fetchTodoList();// 위에서 teamId 변경 -> '내 할일 목록' 으로 변경
-      await fetchTeamList(); // 팀 목록 갱신
-    }
+    if(result) setCurrentTeamId(0);
   }
+  useEffect( ()=>{
+    fetchTodoList().then(() => {
+      fetchTeamList();
+    });
+  }, [currentTeamId])
 
   // 팀 상세창 영역 외 click => 닫힘
   const ref = useRef<HTMLDivElement>(null)
@@ -37,7 +38,7 @@ function TeamDetail({teamName ,currentTeamId, setCurrentTeamId, setActiveTeamDet
       <div onClick={()=>{setShowPopTeamInvite(true); setActiveTeamDetailPop(0);}}>초대하기</div>
       <div onClick={tryDeleteTeam}>삭제하기</div>
 
-      {showPopTeamInvite && <PopTeamInvite teamName={teamName} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
+      {showPopTeamInvite && <PopTeamInvite teamValue={teamValue} setShowPopTeamInvite={setShowPopTeamInvite} currentTeamId={currentTeamId} />}
     </div>
   )
 }

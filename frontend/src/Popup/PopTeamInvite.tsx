@@ -3,19 +3,13 @@ import {getCrewList, putCrew, deleteCrew} from '../api/team';
 
 
 // 팀원 => 초대하기 / 삭제하기
-function PopTeamInvite({teamName, setShowPopTeamInvite, currentTeamId}:any) {
+function PopTeamInvite({teamValue, setShowPopTeamInvite, currentTeamId}:any) {
   let [userId, setUserId] = useState(""); // 팀원 초대 시 => userId 입력
   let [teamCrewArr, setTeamCrewArr] = useState<any[]>([]); // 팀원 목록 state
-  
   // 팀원 조회 (+ state 업데이트)
   async function fetchTeamCrew() {
-    // 더미 데이터
-    setTeamCrewArr([
-      {name : "팀원 1", userId : 1},
-      {name : "팀원 2", userId : 2}
-    ]); 
-    // const result = await getCrewList(currentTeamId);
-    // if(result) setTeamCrewArr(result.data[0].members);
+    const result = await getCrewList(currentTeamId);
+    if(result) setTeamCrewArr(result.members);
   }
   
   // 팀원 초대 (+ state 업데이트)
@@ -23,8 +17,9 @@ function PopTeamInvite({teamName, setShowPopTeamInvite, currentTeamId}:any) {
     if(userId.length === 0) {
       return alert("초대할 아이디를 입력해주세요.");
     }
-    const result = await putCrew(userId);
+    const result = await putCrew(currentTeamId ,userId);
     if(result) await fetchTeamCrew();
+    else alert("존재하지 않는 id 이거나, 이미 팀원에 존재하는 id입니다.");
   }
 
   // 팀원 추방 (+ state 업데이트)
@@ -34,14 +29,15 @@ function PopTeamInvite({teamName, setShowPopTeamInvite, currentTeamId}:any) {
   }
 
   useEffect( ()=>{
-    fetchTeamCrew().then();
-  }, [])
+    fetchTeamCrew()
+  }, []);
+
 
   return (
     <div className="popup">
 
       <div className="popup-inner">
-        <strong className="popup-head">{teamName}팀 - 팀원 초대하기</strong>
+        <strong className="popup-head">{teamValue.name}팀 - 팀원 초대하기</strong>
 
         <div className="popup-body">
 
@@ -54,10 +50,11 @@ function PopTeamInvite({teamName, setShowPopTeamInvite, currentTeamId}:any) {
           </div>
           
           <ul className="list-text">
-            {teamCrewArr.map( (value:any, index:any) => 
-              {return <li key={index /*value.teamCrewId*/}>
-                <span>{value.name}</span>
-                <i className="btn delete" onClick={()=>{kickCrew(value.crewId)}}></i>
+            {teamCrewArr.map( (value:any) => 
+              {return <li key={value.userId}>
+                <span>{value.userId} {teamValue.adminId === value.userId && "(관리자)"}</span>
+                { teamValue.adminId === value.userId
+                  || <i className="btn delete" onClick={()=>{kickCrew(value.userId)}}></i> }
               </li>}
             )}
           </ul>

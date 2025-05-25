@@ -1,32 +1,34 @@
 import { prisma } from "../prisma/client";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { hashPassword, validatePassword } from "../lib/password";
+import { generateToken } from "../lib/jwt";
+import { SignupDTO, LoginDTO } from "../dtos/auth.dto";
 
-export const signup = async (id: string, password: string) => {
-  const existing = await prisma.users.findUnique({ where: { id } });
-  if (existing) throw new Error("이미 존재하는 ID입니다.");
+const findUserById = async (id: string) => {
+  return prisma.users.findUnique({ where: { id } });
+};
 
-  const hashed = await bcrypt.hash(password, 10);
-  const user = await prisma.users.create({
+export const signup = async ({ id, password }: SignupDTO) => {
+  const existingUser = await findUserById(id);
+  if (existingUser) throw new Error("이미 존재하는 ID입니다.");
+
+  const hashedPassword = await hashPassword(password);
+
+  const newUser = await prisma.users.create({
     data: {
       id,
-      password: hashed,
+      password: hashedPassword,
     },
   });
 
-  return { id: user.id };
+  return { id: newUser.id };
 };
 
-export const login = async (id: string, password: string) => {
-  const user = await prisma.users.findUnique({ where: { id } });
+export const login = async ({ id, password }: LoginDTO) => {
+  const user = await findUserById(id);
   if (!user) throw new Error("존재하지 않는 사용자입니다.");
 
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) throw new Error("비밀번호가 일치하지 않습니다.");
+  const isPasswordValid = await validatePassword(password, user.password);
+  if (!isPasswordValid) throw new Error("비밀번호가 일치하지 않습니다.");
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "1h",
-  });
-
-  return token;
+  return generateToken(user.id);
 };

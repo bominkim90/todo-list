@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          String         @id
+  password    String
+  createdAt   DateTime       @default(now())
+  userTodos   UserTodos[]
+  teams       Teams[]        @relation("TeamAdmin")
+  memberships TeamMembers[]
+}
+
+model Teams {
+  id         Int           @id @default(autoincrement())
+  name       String
+  adminId    String
+  admin      Users         @relation("TeamAdmin", fields: [adminId], references: [id])
+  members    TeamMembers[]
+  teamTodos  TeamTodos[]
+}
+
+model TeamMembers {
+  id      Int    @id @default(autoincrement())
+  userId  String
+  teamId  Int
+  user    Users  @relation(fields: [userId], references: [id])
+  team    Teams  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+}
+
+model UserTodos {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      Users    @relation(fields: [userId], references: [id])
+  contents  String
+  isDone    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeamTodos {
+  id        Int      @id @default(autoincrement())
+  teamId    Int
+  team      Teams    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  contents  String
+  isDone    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

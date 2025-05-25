@@ -20,6 +20,6 @@
       "*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "prisma"],
   "exclude": ["node_modules", "dist"] // 제외할 디렉토리
 }

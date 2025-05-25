@@ -6,7 +6,6 @@ import {
   updateTodoContents,
 } from "../controller/todo.controller";
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
 import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();

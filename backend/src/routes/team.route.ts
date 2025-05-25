@@ -12,7 +12,6 @@ import {
   updateTeamTodoStatus,
 } from "../controller/team.controller";
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
 import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();
