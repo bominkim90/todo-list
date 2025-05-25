@@ -36,13 +36,11 @@
 
 ## 스크린샷 (Screenshots)
 
-```
-docs/img/todo_list.png
-```
 
-```md
+![투두리스트](./docs/img/login.png)
+
 ![투두리스트 화면](./docs/img/todos.png)
-```
+
 
 ---
 
