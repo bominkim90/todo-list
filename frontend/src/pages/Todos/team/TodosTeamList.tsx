@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import PopupTeamCreate from "../../../Popup/PopTeamCreate";
 import TeamDetail from './TeamDetail';
@@ -42,6 +43,23 @@ function TodosTeamList(props: TodoTeamListProps){
     setActiveTeamDetailPop(teamId);
     setCurrentTeamId(teamId);
   }
+
+  // 로그아웃
+  async function logout() {
+    // 1. 쿠키 삭제
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    /* 브라우저에서는 JavaScript로 직접 HttpOnly 쿠키는 삭제할 수 없습니다.
+      token이 백엔드에서 HttpOnly로 설정된 쿠키라면, 프론트에서 JS로는 접근할 수도, 삭제할 수도 없습니다. 
+      해결 방법 → 서버에 token 쿠키 제거 처리 요청
+    */
+    // await axios.post('/auth/logout');
+    // 2. localStorage_currentTeamId 삭제
+    localStorage.removeItem('localStorage_currentTeamId');
+    // 3. 로그인페이지로 이동
+    window.location.href = '/login'; // 기존 상태(state), 캐시 등 초기화
+    // const navigate = useNavigate(); // 컴포넌트 상태(state), context, 메모리 유지됨 => 요건 컴포넌트 코드 최상단에 선언해야함
+    // navigate('/login');
+  }
   
   useEffect(()=>{
     fetchTodoList();
@@ -77,6 +95,11 @@ function TodosTeamList(props: TodoTeamListProps){
       
       {/* 팀 만들기 버튼 */}
       <div className="btn center" onClick={ ()=>{setTeamPopup(true);} }>팀 만들기</div>
+      <br />
+      <br />
+      <br />
+      {/* 로그아웃 */}
+      <div className="btn center color-red" onClick={ logout }>로그아웃</div>
       
       {teamPopup && <PopupTeamCreate setTeamPopup={setTeamPopup} fetchTeamList={fetchTeamList} />}
     </div>
