@@ -1,9 +1,13 @@
 import { useState } from "react";
 import {postMyTodo, postTeamTodo} from '../../../api/todos';
 
+type RegistTodoProps = {
+  fetchTodoList: () => Promise<void>;
+  currentTeamId: number;
+};
 
 // todo 등록
-function RegistTodo({fetchTodoList, currentTeamId}:any){
+function RegistTodo({fetchTodoList, currentTeamId}: RegistTodoProps){
   let [todoContents, setTodoContents] = useState("");
 
   // 개인 Todo 등록
