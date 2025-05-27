@@ -1,10 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import PopTeamInvite from '../../../Popup/PopTeamInvite';
 import {deleteTeam} from '../../../api/team';
+import type {Team} from '../../../types/team';
+
+type TeamDetailProps = {
+  teamValue: Team;
+  currentTeamId: number;
+  setCurrentTeamId: (id: number) => void;
+  setActiveTeamDetailPop: (id: number) => void;
+  fetchTeamList: () => Promise<void>;
+  fetchTodoList: () => Promise<void>;
+};
 
 
 // 팀 상세창 (팀 삭제 / 팀원 초대하기 팝업)
-function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList}:any) {
+function TeamDetail(props: TeamDetailProps) {
+  const {teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDetailPop, fetchTeamList, fetchTodoList} = props
   let [showPopTeamInvite, setShowPopTeamInvite] = useState(false); // 팀원 초대하기 pop 보이기
  
   // 팀 '삭제'
@@ -23,12 +34,12 @@ function TeamDetail({teamValue ,currentTeamId, setCurrentTeamId, setActiveTeamDe
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        setActiveTeamDetailPop(0)
+        setActiveTeamDetailPop(0);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => { // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 제거
-      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside);
     }
   }, []);
 

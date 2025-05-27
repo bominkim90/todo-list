@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
   const navigate = useNavigate();
-  const [validationFail, setvalidationFail] = useState(false)
-  const [userId, setUserId] = useState('')
-  const [userPw, setUserPw] = useState('')
-  const [userPw_re, setUserPw_re] = useState('')
+  const [validationFail, setvalidationFail] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userPw, setUserPw] = useState('');
+  const [userPw_re, setUserPw_re] = useState('');
   
   async function trySignup(){
     if(userId.length === 0) return alert("아이디를 입력해주세요");

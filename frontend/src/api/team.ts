@@ -28,7 +28,7 @@ export async function postCreateTeam(teamNameValue: string) {
 }
 
 // 팀 '삭제' DELETE
-export async function deleteTeam(currentTeamId:number) {
+export async function deleteTeam(currentTeamId: number) {
   try {
     const res = await axios.delete(`/teams/${currentTeamId}`);
     return (res.status === 200);
@@ -41,7 +41,7 @@ export async function deleteTeam(currentTeamId:number) {
 
 /******************************************************/
 // 팀원 조회 GET
-export async function getCrewList(currentTeamId: any) {
+export async function getCrewList(currentTeamId: number) {
   try {
     const res = await axios.get(`/teams/${currentTeamId}`);
     return res.data;
@@ -53,7 +53,7 @@ export async function getCrewList(currentTeamId: any) {
 }
 
 // 팀원 초대 
-export async function putCrew(currentTeamId:any ,crewId: any) {
+export async function putCrew(currentTeamId: number ,crewId: number) {
   try {
     const res = await axios.put(`/teams/${currentTeamId}/invite`, {
       userId : crewId
@@ -67,7 +67,7 @@ export async function putCrew(currentTeamId:any ,crewId: any) {
 }
 
 // 팀원 추방 DELETE
-export async function deleteCrew(currentTeamId: any, userId:any) {
+export async function deleteCrew(currentTeamId: number, userId: string) {
   try {
     const res = await axios.delete(`/teams/${currentTeamId}/members/${userId}`);
     return (res.status === 200);

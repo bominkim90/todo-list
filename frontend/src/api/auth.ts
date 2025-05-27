@@ -2,7 +2,7 @@ import axios from '../lib/axios'
 
 
 // 로그인 요청
-export async function postLogin(userId: any, userPw: any){
+export async function postLogin(userId: string, userPw: string){
   try {
     const res = await axios.post('/auth/login', {
       id : userId,

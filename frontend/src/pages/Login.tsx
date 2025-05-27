@@ -5,9 +5,9 @@ import {postLogin} from '../api/auth';
 
 function Login() {
   const navigate = useNavigate();
-  const [validationFail, setValidationFail] = useState(false)
-  const [userId, setUserId] = useState('')
-  const [userPw, setUserPw] = useState('')
+  const [validationFail, setValidationFail] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userPw, setUserPw] = useState('');
 
   async function tryLogin(){
     const success = await postLogin(userId, userPw);

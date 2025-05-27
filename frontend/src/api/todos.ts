@@ -27,7 +27,7 @@ export async function getTeamTodo(currentTeamId:any) {
 
 /*****************************************************/
 // 개인 todo 등록 POST
-export async function postMyTodo(todoContents:any) {
+export async function postMyTodo(todoContents: string) {
   try {
     const res = await axios.post(`/todos`, {
       contents: todoContents
@@ -41,7 +41,7 @@ export async function postMyTodo(todoContents:any) {
 }
 
 // 팀 todo 등록 POST
-export async function postTeamTodo(todoContents:any, currentTeamId:any) {
+export async function postTeamTodo(todoContents: string, currentTeamId: number) {
   try {
     const res = await axios.post(`/teams/${currentTeamId}/todos`, {
       contents: todoContents
@@ -57,7 +57,7 @@ export async function postTeamTodo(todoContents:any, currentTeamId:any) {
 
 /*****************************************************/
 // 개인 todo 수정 PUT
-export async function putMyTodo(todoId:any, todoContents:any) {
+export async function putMyTodo(todoId: number, todoContents: string) {
   try {
     const res = await axios.put(`/todos/${todoId}/contents`, {
       contents: todoContents
@@ -71,8 +71,8 @@ export async function putMyTodo(todoId:any, todoContents:any) {
 }
 
 // 팀 todo 수정 PUT
-export async function putTeamTodo(currentTeamId:any ,id:any, todoContents:any) {
-  try { // teams/:teamId/todos/:id/contents
+export async function putTeamTodo(currentTeamId: number ,id: number, todoContents: string) {
+  try {
     const res = await axios.put(`/teams/${currentTeamId}/todos/${id}/contents`, {
       todoId: id,
       contents: todoContents
@@ -87,7 +87,7 @@ export async function putTeamTodo(currentTeamId:any ,id:any, todoContents:any) {
 
 /*****************************************************/
 // 개인 todo 삭제 DELETE
-export async function deleteMyTodo(id:any) {
+export async function deleteMyTodo(id: number) {
   try {
     const res = await axios.delete(`/todos/${id}`, {
       data: {
@@ -103,7 +103,7 @@ export async function deleteMyTodo(id:any) {
 }
 
 // 팀 todo 삭제 DELETE
-export async function deleteTeamTodo(currentTeamId:any ,id:any) {
+export async function deleteTeamTodo(currentTeamId: number ,id: number) {
   try {
     const res = await axios.delete(`/teams/${currentTeamId}/todos/${id}`, {
       data: {
@@ -120,7 +120,7 @@ export async function deleteTeamTodo(currentTeamId:any ,id:any) {
 
 /*****************************************************/
 // 개인 todo 상태변경 PUT
-export async function putChangeMyTodoDone(todoId:any) {
+export async function putChangeMyTodoDone(todoId: number) {
   try {
     const res = await axios.put(`/todos/${todoId}/done`);
     console.log("개인 todo 상태변경 res : ", res);
@@ -133,7 +133,7 @@ export async function putChangeMyTodoDone(todoId:any) {
 }
 
 // 팀 todo 상태변경 PUT
-export async function putChangeTeamTodoDone(currentTeamId:any, id:any) {
+export async function putChangeTeamTodoDone(currentTeamId: number, id: number) {
   try {
     const res = await axios.put(`/teams/${currentTeamId}/todos/${id}/done`);
     return (res.status === 200);
