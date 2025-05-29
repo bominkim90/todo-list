@@ -1,7 +1,7 @@
 # 백엔드
 
 Node.js + Express + Prisma 기반의 백엔드 서버입니다.  
-JWT 쿠키 인증을 적용했고, 개인/팀 Todo 기능을 제공합니다다
+JWT 쿠키 인증을 적용했고, 개인/팀 Todo 기능을 제공합니다
 
 ---
 
@@ -12,7 +12,6 @@ JWT 쿠키 인증을 적용했고, 개인/팀 Todo 기능을 제공합니다다
 - TypeScript
 - Prisma (ORM)
 - MariaDB
-- JWT (httpOnly 쿠키 기반 인증)
 - Swagger (OpenAPI 문서 자동화)
 
 ---
@@ -52,7 +51,7 @@ npm install
 
 ```bash
 npx prisma generate       # Prisma Client 생성
-npx prisma migrate dev    # 기존 DB 있을 경우에에
+npx prisma migrate dev    # 기존 DB 있을 경우에
 npx prisma db push        # 기존 DB에 강제 반영
 ```
 
@@ -89,8 +88,6 @@ JWT_SECRET=secret
 - 팀 Todo 생성 / 수정 / 완료 체크 / 삭제
 
 - 팀 목록 및 팀 상세 조회
-
-- 인증 미들웨어를 통한 보호 API 처리
 
 ### API 문서
 
